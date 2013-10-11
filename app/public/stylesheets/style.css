@@ -1,0 +1,44 @@
+html {
+  background: #ececec;
+  background: -moz-linear-gradient(-90deg, #fff, #ececec) fixed;
+  background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ececec)) fixed;
+}
+body {
+  padding: 120px 150px;
+  font: 14px/1.4 'helvetica neue', helvetica, arial, sans-serif;
+  color: #434343;
+}
+.buttonstock {
+  width: 75px;
+  padding: 10px;
+  color: #e8e8e8;
+  overflow-x: auto;
+  background: #789270;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-shadow: rgba(34,34,34,0.1) -1px -1px;
+  -webkit-box-shadow: rgba(34,34,34,0.1) -1px -1px;
+  box-shadow: rgba(34,34,34,0.1) -1px -1px;
+  margin-bottom: 10px;
+  font-family: fontBoldStock;
+  font-size: 1.5em;
+}
+.buttonstock:hover {
+  background-color: #aecaa5;
+}
+.stocklist {
+  background-color: #99bb8c;
+  padding: 15px;
+  width: 100px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+}
+@font-face {
+  font-family: fontBoldStock;
+  src: url("../SourceCodePro-Bold.otf");
+}
+.chart rect {
+  fill: #4682b4;
+  stroke: #fff;
+}
