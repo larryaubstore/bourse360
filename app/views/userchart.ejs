@@ -1,8 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script data-main="/javascripts/main" src="/javascripts/require.js"></script>
+
+    <script type="text/javascript">
+      define("config", function () {
+        var performance = [<%= performance %>];
+        return {
+          performance: performance
+        };
+      });
+    </script>
+
+
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+
+
   </head>
   <body>
     <div class="stocklist">

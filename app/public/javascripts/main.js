@@ -1,8 +1,6 @@
 //var require = requirejs.config({
 //  baseUrl: "/"
 //});
+requirejs(["userchart/viewchart", "d3", "config"   ], function( viewchart, d3test, config) {
 
-require(["d3", "userchart/viewchart", "config"], function(d3, viewchart, config) {
-  console.log("running main");
-  alert(config.performance);
 });
