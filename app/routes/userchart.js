@@ -21,7 +21,7 @@ exports.show = function(req, res){
     var obj = {};
     obj.test = 1; 
 
-    var performance = [-3.5, 1, 2, -0.3, 2, 0.5, 2];
+    var performance = [+3.5, 1, 2, +0.3, 2, 0.5, 10];
     //var performance = obj;
 
 

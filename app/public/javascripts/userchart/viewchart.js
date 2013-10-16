@@ -8,7 +8,12 @@
 define(["d3", "config"  ], function(d3require, config ) {
   var t = 1297110663, // start time (seconds since epoch)
       v = 70, // start value (subscribers)
-      data = d3.range(33).map(next); // starting dataset
+      //data = d3.range(33).map(next); // starting dataset
+      //
+      //
+      data = config.performance;
+  
+  //debugger;
 
   function next() {
     return {
@@ -17,36 +22,72 @@ define(["d3", "config"  ], function(d3require, config ) {
     };
   }
 
+  var yAxisData = [0, 2.5, 5.0, 7.5, 10, 12.5, 15];
 
   var w = 20,
-      h = 80;
+      h = 280;
   
   var x = d3.scale.linear()
       .domain([0, 1])
       .range([0, w]);
   
   var y = d3.scale.linear()
-      .domain([0, 100])
-     .rangeRound([0, h]);
+     //.domain([0, 100])
+     //.range([0, h]);
+     .domain([0, 15])
+     .range([0, 180]);
+
+
+  var constY = -5; 
 
   var chart = d3.select("body").append("svg")
     .attr("class", "chart")
-    .attr("width", w * data.length - 1)
+    .attr("width", w * data.length - 1 + 100)
+    .attr("style", "margin-top:20px")
     .attr("height", h);
 
   chart.selectAll("rect")
     .data(data)
     .enter().append("rect")
-    .attr("x", function(d, i) { return x(i) - .5; })
-    .attr("y", function(d) { return h - y(d.value) - .5; })
+    .attr("x", function(d, i) { return x(i) +  50; })
+    .attr("y", function(d) {
+      return h - y(d) + constY; 
+    })
     .attr("width", w)
-    .attr("height", function(d) { return y(d.value); });
+    .attr("height", function(d) { 
+      return y(d); 
+    });
+
+  chart.selectAll("text")
+    .data(yAxisData)
+    .enter().append("text")
+    .attr("dy", ".32em")
+    .attr("x", "0")
+    .attr("y", function(d) { 
+      return h - y(d) + constY; 
+    })
+    .text(function(d) { 
+      return d; 
+    });
+
+  chart.selectAll("line")
+    .data(yAxisData)
+    .enter().append("line")
+    .attr("x1", 50)
+    .attr("x2", w * data.length - 1 + 50)
+    .attr("y1", function(d) {
+      return h - y(d) + constY;
+    })
+    .attr("y2", function(d) {
+      return h - y(d) + constY;
+    })
+    .style("stroke", "#000");
 
   chart.append("line")
-     .attr("x1", 0)
-     .attr("x2", w * data.length)
-     .attr("y1", h - .5)
-     .attr("y2", h - .5)
+     .attr("x1", 50)
+     .attr("x2", w * data.length - 1 + 50)
+     .attr("y1", h + constY)
+     .attr("y2", h + constY)
      .style("stroke", "#000");
 
   function redraw() {
@@ -55,8 +96,8 @@ define(["d3", "config"  ], function(d3require, config ) {
         .data(data)
         .transition()
         .duration(1000)
-        .attr("y", function(d) { return h - y(d.value) - .5; })
-        .attr("height", function(d) { return y(d.value); });
+        .attr("y", function(d) { return h - y(d) - .5; })
+        .attr("height", function(d) { return y(d); });
   }
 
 //  return {
