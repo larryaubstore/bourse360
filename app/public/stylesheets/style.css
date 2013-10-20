@@ -38,7 +38,11 @@ body {
   font-family: fontBoldStock;
   src: url("../SourceCodePro-Bold.otf");
 }
-.chart rect {
-  fill: #4682b4;
+.chartpositive {
+  fill: #008000;
+  stroke: #fff;
+}
+.chartnegative {
+  fill: #f00;
   stroke: #fff;
 }
