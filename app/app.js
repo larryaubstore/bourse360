@@ -8,6 +8,8 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
+var company = require('./routes/company/company');
+
 
 //var requirejsMiddleware = require("requirejs-middleware");
 
@@ -17,9 +19,9 @@ var requirejs = require("requirejs");
 
 var app = express();
 
-//var chart = require("./public/javascripts/chart");
-//
+//var chart = require('./routes/userchart');
 var chart = require('./routes/userchart');
+//var company
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -67,6 +69,8 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/users', user.list);
+app.get('/company/:id', company.show);
+
 app.get('/chart/:id', chart.show);
 
 http.createServer(app).listen(app.get('port'), function(){
