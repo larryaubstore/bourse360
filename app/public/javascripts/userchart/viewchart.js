@@ -22,6 +22,21 @@ define(["d3", "config"  ], function(d3require, config ) {
     };
   }
 
+
+  data =  [ {period: 5, name: "may", perf: 3.5}, 
+            {period: 5, name: "may", perf: 1}, 
+            {period: 6, name: "june", perf: 2}, 
+            {period: 6, name: "june", perf: 0.3},
+            {period: 6, name: "june", perf: 2}, 
+            {period: 7, name: "july", perf: 0.5}, 
+            {period: 7, name: "july", perf: 10}, 
+            {period: 8, name: "august", perf: -12.5} ];
+
+  var dataNested=d3.nest()
+    .key(function(d) {return d.period;})
+    .sortKeys(d3.ascending)
+    .entries(data);
+
   var yAxisData = [0, 2.5, 5.0, 7.5, 10, 12.5, 15];
 
   var w = 60,
@@ -32,11 +47,8 @@ define(["d3", "config"  ], function(d3require, config ) {
       .range([0, w]);
   
   var y = d3.scale.linear()
-     //.domain([0, 100])
-     //.range([0, h]);
      .domain([0, 15])
      .range([0, 180]);
-
 
   var constY = -5; 
   var width = w * data.length - 1 + 100;
@@ -53,39 +65,57 @@ define(["d3", "config"  ], function(d3require, config ) {
 
 
   var bars = chart.selectAll("rect")
-    .data(data);
+      .data(data);
 
     bars.enter().append("rect")
     .attr("class", function(d) {
-      if(y(d) >= 0) {
+      if(y(d.perf) >= 0) {
         return "chartpositive";
       } else {
         return "chartnegative";
       }
     })
-    .attr("x", function(d, i) { return x(i) +  50; })
+    .attr("x", function(d, i) {
+      return x(i) +  50;
+     })
     .attr("y", function(d) {
-      if(y(d) >= 0) {
-        return (h/2 - y(d) + constY) ; 
+      
+      if(y(d.perf) >= 0) {
+        return (h/2 - y(d.perf) + constY) ; 
       } else {
         return (h/2  + constY) ; 
       }
     })
     .attr("transform", function(d) {
-      if(y(d) >= 0) {
-        return "translate(0," + Math.abs(y(d)) + ")";
+      if(y(d.perf) >= 0) {
+        return "translate(0," + Math.abs(y(d.perf)) + ")";
       } else {
         return "translate(0,0)";
       }
     })
-    .attr("width", w)
+    .attr("width", function(d) {
+      return w;
+    })
     .attr("height", function(d) { 
       return 0;
+    })
+    .on("mouseover", function(d){
+      d3.select(this).transition().duration(750)
+        .style("fill", "#FFD700");
+    })
+    .on("mouseout", function(d){
+      if(y(d.perf) >= 0) {
+        d3.select(this).transition().duration(750)
+          .style("fill", "green");
+      } else {
+        d3.select(this).transition().duration(750)
+          .style("fill", "red");
+      }
     })
     .transition()
       .duration(750)
       .attr("height", function(d) {
-        return Math.abs(y(d));
+        return Math.abs(y(d.perf));
       })
       .attr("transform", function(d) {
         return "translate(0,0)"
