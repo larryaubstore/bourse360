@@ -43,23 +43,23 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
       .scale(y)
       .orient("left");
 
-  var line = d3.svg.line()
-      .x(function(d) { 
-        return x(d[0]); 
-      })
-      .y(function(d) { 
-        return y(d[1]); 
-      });
+  var area = d3.svg.area()
+    .x(function(d) { 
+      return x(d[0]); 
+    })
+    .y0(height)
+    .y1(function(d) { 
+      return y(d[1]); 
+    });
 
-  var lineZero = d3.svg.line()
-      .x(function(d) { 
-        return 0; 
-      })
-      .y(function(d) { 
-        return 0; 
-      });
-
-
+  var areaZero = d3.svg.area()
+    .x(function(d) { 
+      return x(d[0]); 
+    })
+    .y0(height)
+    .y1(function(d) { 
+      return 0; 
+    });
 
   var graphData = { zoom: 1 };
 
@@ -75,13 +75,6 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
     svg = d3.select("svg").append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-//  var svg = d3.select("body").data(graphData);
-//    svg.enter().append("svg")
-//      .attr("width", width + margin.left + margin.right)
-//      .attr("height", height + margin.top + margin.bottom)
-//      .attr("style", "margin:0 auto;width:960px;display:block")
-//    .append("g")
-//      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   var startingDate = new Date(2013, 1, 1);
   var endingDate = new Date(2013, 2, 1);
@@ -110,22 +103,11 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end");
-//      .text("Price ($)");
-//
-//
-  
-  //var chart = svg.select("#chart path.line").data(data);
-  //
-
-  //var chart = svg.select("#chart")
-  //chart.enter()
-  //
-  
+ 
      svg.datum(data)
       .append("path")
-      //.attr("class", "line")
       .attr("class", "area")
-      .attr("d", lineZero)
+      .attr("d", areaZero)
       .on('mouseover', function (d, i) {
         var epoch = (new Date).getTime();      
         var x = d3.mouse(this)[0];
@@ -144,7 +126,7 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
       })
       .transition()
         .duration(1000)
-        .attr("d", line);
+        .attr("d", area);
 
 
   var addCircle = function(pathSelection) {
