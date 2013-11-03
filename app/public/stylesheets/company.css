@@ -10,7 +10,8 @@
 }
 
 .area {
-  fill: steelblue;;
+  fill: steelblue;
+  /*pointer-events:all;*/
 }
 
 /*

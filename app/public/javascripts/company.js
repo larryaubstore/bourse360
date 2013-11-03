@@ -6,26 +6,10 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
 
   var data = stockData.data_values;
 
+
   var margin = {top: 20, right: 20, bottom: 30, left: 50},
       width = 960 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom;
-
-//  var utcSeconds = 1234567890;
-//  var d = new Date(0); 
-//  d.setUTCSeconds(utcSeconds);
-
-  var epochToDate = function(epochTime) {
-    var epochZero = new Date(0);
-    epochZero.setMilliseconds(epochTime);
-
-    var dateFormatted = epochZero.getYear() + "-" + epochZero.getMonth() + "-" + epochZero.getDay();
-    return dateFormatted;
-  }
-
-  var test = epochToDate(1382952960000);
-
-  var firstDate = new Date(2013, 0, 1, 0, 0, 0, 0);
-  var secondDate = new Date(2014, 0, 1, 0, 0, 0, 0);
 
 
   var x = d3.time.scale()
@@ -62,33 +46,51 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
     });
 
   var graphData = { zoom: 1 };
+  var pathSelection = [];
 
-  var svg = d3.select("body").append("svg")
-      .attr("height", 0) 
+  var svgContainer = d3.select("#chart").append("svg");
+
+
+     svgContainer.attr("height", 0) 
       .attr("width", width + margin.left + margin.right)
-      .attr("style", "margin:0 auto;width:960px;display:block")
+      //.attr("style", "width:100%;height:100%;display:block")
+      //.attr("style", "margin:0 auto;width:960px;display:block")
+     .on('mouseover', function () {
+      })
       .transition()
         .duration(1000)
         .attr("height", height + margin.top + margin.bottom);
 
+    svgContainer.on('mousemove', function () {
+
+      console.log("test");
+      var epoch = (new Date).getTime();      
+      var x = d3.mouse(this)[0];
+      var y = d3.mouse(this)[1];
+
+      var obj = {index: epoch, x: x, y: y};
+
+      //pathSelection.push(obj);
+      //addCircle(pathSelection);
+
+    });
+ 
 
     svg = d3.select("svg").append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-  var startingDate = new Date(2013, 1, 1);
-  var endingDate = new Date(2013, 2, 1);
+  var xMinMax = d3.extent(data, function(d) {
+    return d[0];
+  });
 
-  var interval = endingDate.getTime() - startingDate.getTime();
+  var yMinMax = d3.extent(data, function(d) {
+    return d[1];
+  });
 
-  var pathSelection = [];
 
-  x.domain(d3.extent(data, function(d) { 
-    return d[0]; 
-  }));
-  y.domain(d3.extent(data, function(d) { 
-    return d[1]; 
-  }));
+  x.domain(xMinMax); 
+  y.domain(yMinMax);
 
   svg.append("g")
       .attr("class", "x axis")
@@ -103,19 +105,22 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
       .attr("y", 6)
       .attr("dy", ".71em")
       .style("text-anchor", "end");
- 
+
+
+
+  var drawChart = function () {
      svg.datum(data)
       .append("path")
       .attr("class", "area")
       .attr("d", areaZero)
-      .on('mouseover', function (d, i) {
+      .on('mousemove', function (d, i) {
         var epoch = (new Date).getTime();      
         var x = d3.mouse(this)[0];
         var y = d3.mouse(this)[1];
 
         var obj = {index: epoch, x: x, y: y};
 
-        pathSelection.push(obj);
+        //pathSelection.push(obj);
         //addCircle(pathSelection);
       })
       .on('mouseout', function (d, i) {
@@ -125,15 +130,15 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
         }, 600);
       })
       .transition()
-        .duration(1000)
+        .duration(3000)
         .attr("d", area);
-
+  };
+ 
 
   var addCircle = function(pathSelection) {
-      var circle = svg.selectAll("circle").data(pathSelection, function(d) {
+      var circle = svgContainer.selectAll("circle").data(pathSelection, function(d) {
         return d.index; 
       });
-
 
       circle.enter()
         .append("circle")
@@ -155,4 +160,8 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
           .attr("r", 0)
         .remove();
   };
+
+
+  drawChart();
+
 });
