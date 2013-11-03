@@ -23,10 +23,6 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
   }
 
   var test = epochToDate(1382952960000);
-  //var test = epochToDate(1234567890);
-
-  //var parseDate = d3.time.format("%d-%b-%y").parse;
-
 
   var firstDate = new Date(2013, 0, 1, 0, 0, 0, 0);
   var secondDate = new Date(2014, 0, 1, 0, 0, 0, 0);
@@ -34,10 +30,6 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
 
   var x = d3.time.scale()
       .range([0, width]);
-      //.ticks(d3.time.minute, 15);
-
-      
-      //.range([firstDate, secondDate]);
       
   var y = d3.scale.linear()
       .range([height, 0]);
@@ -59,19 +51,37 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
         return y(d[1]); 
       });
 
+  var lineZero = d3.svg.line()
+      .x(function(d) { 
+        return 0; 
+      })
+      .y(function(d) { 
+        return 0; 
+      });
+
+
+
+  var graphData = { zoom: 1 };
+
   var svg = d3.select("body").append("svg")
+      .attr("height", 0) 
       .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
       .attr("style", "margin:0 auto;width:960px;display:block")
-    .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .transition()
+        .duration(1000)
+        .attr("height", height + margin.top + margin.bottom);
 
-  //d3.tsv("data.tsv", function(error, data) {
 
-//  data.forEach(function(d) {
-//    d.date = parseDate(d.date);
-//    d.close = +d.close;
-//  });
+    svg = d3.select("svg").append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//  var svg = d3.select("body").data(graphData);
+//    svg.enter().append("svg")
+//      .attr("width", width + margin.left + margin.right)
+//      .attr("height", height + margin.top + margin.bottom)
+//      .attr("style", "margin:0 auto;width:960px;display:block")
+//    .append("g")
+//      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   var startingDate = new Date(2013, 1, 1);
   var endingDate = new Date(2013, 2, 1);
@@ -80,11 +90,8 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
 
   var pathSelection = [];
 
-  //x.domain([startingDate, endingDate]);
-
   x.domain(d3.extent(data, function(d) { 
     return d[0]; 
-//    //return startingDate.setUTCSeconds(
   }));
   y.domain(d3.extent(data, function(d) { 
     return d[1]; 
@@ -104,11 +111,21 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
       .attr("dy", ".71em")
       .style("text-anchor", "end");
 //      .text("Price ($)");
+//
+//
+  
+  //var chart = svg.select("#chart path.line").data(data);
+  //
 
-  svg.append("path")
-      .datum(data)
-      .attr("class", "line")
-      .attr("d", line)
+  //var chart = svg.select("#chart")
+  //chart.enter()
+  //
+  
+     svg.datum(data)
+      .append("path")
+      //.attr("class", "line")
+      .attr("class", "area")
+      .attr("d", lineZero)
       .on('mouseover', function (d, i) {
         var epoch = (new Date).getTime();      
         var x = d3.mouse(this)[0];
@@ -124,7 +141,10 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
           //pathSelection.pop();
           //addCircle(pathSelection);
         }, 600);
-      });
+      })
+      .transition()
+        .duration(1000)
+        .attr("d", line);
 
 
   var addCircle = function(pathSelection) {
@@ -153,21 +173,4 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
           .attr("r", 0)
         .remove();
   };
-      
-
-//      //svg.data(pathSelection).enter().append("circle")
-//      svg.data(pathSelection).append("circle")
-//        .attr("cx", function (d) {
-//          return d.x;
-//        })
-//        .attr("cy", function (d) {
-//          return d.y;
-//        })
-//        .attr("r", 0)
-//        .attr("fill", "red")
-//        .transition()
-//          .duration(1000)
-//          .attr("r", 20);
-
-
 });
