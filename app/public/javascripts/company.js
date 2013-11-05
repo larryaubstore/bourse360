@@ -56,7 +56,7 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
         .duration(1000)
         .attr("height", height + margin.top + margin.bottom);
 
-    svgContainer.on('mousemove', function () {
+    svgContainer.on('click', function () {
       var xMouse = d3.mouse(this)[0] - 50;
       var yMouse = d3.mouse(this)[1];
 
@@ -70,7 +70,7 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
       var yConvert = y(data[xIndex][1]);
 
       var obj = [{ x: xConvert, y: yConvert}];
-      addCircle(obj);
+      addCircle(obj, d3.mouse(this)[0], d3.mouse(this)[1]);
     });
  
 
@@ -126,36 +126,81 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
   };
  
 
-  var addCircle = function(arg) {
-      var circle = svgContainer.selectAll("circle").data(arg);
-      circle.enter()
-        .append("circle")
-        .attr("cx", function (d) {
-          return d.x;
+  var addCircle = function(arg, mouseX, mouseY) {
+
+      var circle = svgContainer
+        .append("circle");
+
+
+        circle.on("mouseover", function(d) {
+          d3.select(this).transition()
+            .duration(500)
+            .attr("fill", "green");
+        });
+
+        circle.on("mouseout", function(d) {
+          d3.select(this).transition()
+            .duration(500)
+            .attr("fill", "red");
+        });
+
+        circle.attr("cx", function (d) {
+          return mouseX;
         })
         .attr("cy", function (d) {
-          return d.y;
+          return mouseY;
         })
         .attr("r", 0)
         .attr("fill", "red")
         .transition()
           .duration(500)
-          .attr("r", 5);
+          .attr("r", 5)
+          .transition()
+            .duration(500)
+            .attr("cx", function (d) {
+              return arg[0].x + 50;
+            })
+            .attr("cy", function (d) {
+              return arg[0].y + 20;
+            });
+
+//          .attr("cx", function (d) {
+//            return arg.x;
+//          })
+//          .attr("cy", function (d) {
+//            return arg.y;
+//          });
 
 
-      circle
-        .attr("cx", function (d) {
-          return d.x + 50;
-        })
-        .attr("cy", function (d) {
-          return d.y + 20;
-        });
+//var circle = svgContainer.selectAll("circle").data(arg);
+//      circle.enter()
+//        .append("circle")
+//        .attr("cx", function (d) {
+//          return d.x;
+//        })
+//        .attr("cy", function (d) {
+//          return d.y;
+//        })
+//        .attr("r", 0)
+//        .attr("fill", "red")
+//        .transition()
+//          .duration(500)
+//          .attr("r", 5);
 
-      circle.exit()
-        .transition()
-          .duration(500)
-          .attr("r", 0)
-        .remove();
+
+//      circle
+//        .attr("cx", function (d) {
+//          return d.x + 50;
+//        })
+//        .attr("cy", function (d) {
+//          return d.y + 20;
+//        });
+//
+//      circle.exit()
+//        .transition()
+//          .duration(500)
+//          .attr("r", 0)
+//        .remove();
   };
   drawChart();
 });
