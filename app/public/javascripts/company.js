@@ -67,15 +67,17 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
 
       //console.log("test");
       var epoch = (new Date).getTime();      
+//      var xMouse = d3.mouse(this)[0] - margin.left - margin.right;
+//      var yMouse = d3.mouse(this)[1] - margin.top - margin.bottom;
+
       var xMouse = d3.mouse(this)[0];
       var yMouse = d3.mouse(this)[1];
-
 
       //var xInterpolate = (width - xMouse) / width  * (xMinMax[1] - xMinMax[0]) + xMinMax[0];
       //var yInterpolate = (height - yMouse) / height  * (yMinMax[1] - yMinMax[0]) + yMinMax[0];
 
-      var xInterpolate = 1 - (width - xMouse) / width;
-      var yInterpolate = 1 - (height - yMouse) / height;
+      var xInterpolate = 1 - (width - xMouse) / (width  );
+      var yInterpolate = 1 - (height - yMouse) / (height );
 
 
       var xIndex = Math.ceil(xInterpolate * data.length);
@@ -193,10 +195,10 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
 
       circle
         .attr("cx", function (d) {
-          return d.x;
+          return d.x + 50;
         })
         .attr("cy", function (d) {
-          return d.y;
+          return d.y + 20;
         });
 
       circle.exit()
