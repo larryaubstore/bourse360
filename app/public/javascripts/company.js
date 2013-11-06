@@ -45,12 +45,19 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
   var graphData = { zoom: 1 };
   var pathSelection = [];
 
+  var chartPath;
+
   var isAdded = false;
 
   var svgContainer = d3.select("#chart").append("svg");
      svgContainer.attr("height", 0) 
       .attr("width", width + margin.left + margin.right)
-     .on('mouseover', function () {
+     .on('mousemove', function () {
+        var xMouse = d3.mouse(this)[0] - 50;
+        var yMouse = d3.mouse(this)[1];
+
+        drawLine({x: xMouse, y: yMouse });
+        
       })
       .transition()
         .duration(1000)
@@ -72,6 +79,7 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
       var obj = [{ x: xConvert, y: yConvert}];
       addCircle(obj, d3.mouse(this)[0], d3.mouse(this)[1]);
     });
+
  
 
     svg = d3.select("svg").append("g")
@@ -105,11 +113,50 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
       .style("text-anchor", "end");
 
 
+//    svgContainer.append("line")
+//      <line x1="10" y1="30" x2="10" y2="80"
+
+
+  var drawLine = function(params) {
+
+
+    var obj = [params];
+
+    var line = svgContainer.selectAll("line").data(obj);
+    //
+
+    line.enter().append("line")
+      .attr("x1", function(d) {
+        return d.x;
+      })
+      .attr("x2", function(d) {
+        return d.x;
+      })
+      .attr("y1", 0)
+      .attr("y2", 30)
+      .attr("style", "stroke-width: 10; stroke: black;");
+
+    line
+      .attr("x1", function(d) {
+        return d.x;
+      })
+      .attr("x2", function(d) {
+        return d.x;
+      })
+      .attr("y1", 0)
+      .attr("y2", -430)
+      .attr("style", "stroke-width: 10; stroke: black;");
+
+
+
+
+  }
 
   var drawChart = function () {
-     svg.datum(data)
-      .append("path")
-      .attr("class", "area")
+     chartPath = svg.datum(data).append("path");
+
+
+      chartPath.attr("class", "area")
       .attr("d", areaZero)
       .on('mousemove', function (d, i) {
         var epoch = (new Date).getTime();      
