@@ -132,18 +132,6 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
         .append("circle");
 
 
-        circle.on("mouseover", function(d) {
-          d3.select(this).transition()
-            .duration(500)
-            .attr("fill", "green");
-        });
-
-        circle.on("mouseout", function(d) {
-          d3.select(this).transition()
-            .duration(500)
-            .attr("fill", "red");
-        });
-
         circle.attr("cx", function (d) {
           return mouseX;
         })
@@ -161,46 +149,23 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
               return arg[0].x + 50;
             })
             .attr("cy", function (d) {
-              return arg[0].y + 20;
+              return arg[0].y + 15;
+            })
+            .each("end", function() {
+              d3.select(this).on("mouseover", function(d) {
+                    d3.select(this).transition()
+                      .duration(500)
+                      .attr("fill", "green");
+                  });
+
+              d3.select(this).on("mouseout", function(d) {
+                d3.select(this).transition()
+                  .duration(500)
+                  .attr("fill", "red");
+              });
             });
 
-//          .attr("cx", function (d) {
-//            return arg.x;
-//          })
-//          .attr("cy", function (d) {
-//            return arg.y;
-//          });
 
-
-//var circle = svgContainer.selectAll("circle").data(arg);
-//      circle.enter()
-//        .append("circle")
-//        .attr("cx", function (d) {
-//          return d.x;
-//        })
-//        .attr("cy", function (d) {
-//          return d.y;
-//        })
-//        .attr("r", 0)
-//        .attr("fill", "red")
-//        .transition()
-//          .duration(500)
-//          .attr("r", 5);
-
-
-//      circle
-//        .attr("cx", function (d) {
-//          return d.x + 50;
-//        })
-//        .attr("cy", function (d) {
-//          return d.y + 20;
-//        });
-//
-//      circle.exit()
-//        .transition()
-//          .duration(500)
-//          .attr("r", 0)
-//        .remove();
   };
   drawChart();
 });
