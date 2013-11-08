@@ -122,19 +122,23 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
 
     var obj = [params];
 
-    var line = svgContainer.selectAll("line").data(obj);
-    //
+    var line = svgContainer.selectAll(".myline").data(obj);
 
-    line.enter().append("line")
-      .attr("x1", function(d) {
-        return d.x;
-      })
-      .attr("x2", function(d) {
-        return d.x;
-      })
-      .attr("y1", 0)
-      .attr("y2", 30)
-      .attr("style", "stroke-width: 10; stroke: black;");
+      line.enter()
+        .append("g")
+        .attr("opacity", 1)
+          .append("line")
+            .attr("class", "myline")
+            .attr("x1", function(d) {
+              return d.x;
+            })
+            .attr("x2", function(d) {
+              return d.x;
+            })
+            .attr("y1", 0)
+            .attr("y2", 30)
+            .attr("style", "stroke-width: 10; stroke: black;");
+
 
     line
       .attr("x1", function(d) {
@@ -144,7 +148,7 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
         return d.x;
       })
       .attr("y1", 0)
-      .attr("y2", -430)
+      .attr("y2", height + 20)
       .attr("style", "stroke-width: 10; stroke: black;");
 
 
