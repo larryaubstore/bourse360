@@ -56,7 +56,7 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
         var xMouse = d3.mouse(this)[0] - 50;
         var yMouse = d3.mouse(this)[1];
 
-        drawLine({x: xMouse, y: yMouse });
+        drawLine({opacity: 1, x: xMouse, y: yMouse });
         
       })
       .transition()
@@ -119,41 +119,40 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
 
   var drawLine = function(params) {
 
-
     var obj = [params];
+    
+    var myg = svgContainer.selectAll(".myg").data(obj);
+    myg.enter()
+      .append("g")
+      .attr("class", "myg")
+      .attr("opacity", function(d) {
+          return d.opacity;
+      });
 
-    var line = svgContainer.selectAll(".myline").data(obj);
+    
+    var myline = myg.selectAll(".myline").data(obj);  
+    myline.enter().append("line")
+          .attr("class", "myline")
+          .attr("x1", function(d) {
+            return d.x;
+          })
+          .attr("x2", function(d) {
+            return d.x;
+          })
+          .attr("y1", 0)
+          .attr("y2", 30)
+          .attr("style", "stroke-width: 10; stroke: black;");
 
-      line.enter()
-        .append("g")
-        .attr("opacity", 1)
-          .append("line")
-            .attr("class", "myline")
-            .attr("x1", function(d) {
-              return d.x;
-            })
-            .attr("x2", function(d) {
-              return d.x;
-            })
-            .attr("y1", 0)
-            .attr("y2", 30)
-            .attr("style", "stroke-width: 10; stroke: black;");
-
-
-    line
+    myline
       .attr("x1", function(d) {
-        return d.x;
+          return d.x;
       })
       .attr("x2", function(d) {
-        return d.x;
+          return d.x;
       })
       .attr("y1", 0)
       .attr("y2", height + 20)
       .attr("style", "stroke-width: 10; stroke: black;");
-
-
-
-
   }
 
   var drawChart = function () {
