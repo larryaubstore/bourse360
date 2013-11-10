@@ -8,21 +8,49 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
       width = 960 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom;
 
-
-  var x = d3.time.scale()
-      .range([0, width]);
-      
-  var y = d3.scale.linear()
-      .range([height, 0]);
-
-  var xAxis = d3.svg.axis()
-      .scale(x)
-      .orient("bottom");
+  var x;
+  var y;
+  var xAxis;
+  var yAxis;
 
 
-  var yAxis = d3.svg.axis()
-      .scale(y)
-      .orient("left");
+
+  var initData = function (width, height) {
+    x = d3.time.scale()
+    .range([0, width]);
+    
+    y = d3.scale.linear()
+    .range([height, 0]);
+
+    xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+
+    yAxis = d3.svg.axis()
+       .scale(y)
+       .ticks(15)
+       .tickSize(-1)
+       .orient("left");
+  }; 
+
+  initData(width, height); 
+
+
+//  var x = d3.time.scale()
+//      .range([0, width]);
+//      
+//  var y = d3.scale.linear()
+//      .range([height, 0]);
+//
+//  var xAxis = d3.svg.axis()
+//      .scale(x)
+//      .orient("bottom");
+//
+//
+//  var yAxis = d3.svg.axis()
+//      .scale(y)
+//      .orient("left");
 
   var area = d3.svg.area()
     .x(function(d) { 
@@ -42,12 +70,59 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
       return 0; 
     });
 
+
+  var zoomed = function () {
+    console.log("zoom ...");
+    svg.select(".x.axis").call(xAxis);
+    svg.select(".y.axis").call(yAxis);
+  };
+
+
   var graphData = { zoom: 1 };
   var pathSelection = [];
 
   var chartPath;
 
   var isAdded = false;
+  var drawLine = function(params) {
+
+    params.x = params.x + 50;
+
+    var obj = [params];
+    
+    var myg = svgContainer.selectAll(".myg").data(obj);
+    myg.enter()
+      .append("g")
+      .attr("class", "myg")
+      .attr("opacity", function(d) {
+          return d.opacity;
+      });
+
+    
+    var myline = myg.selectAll(".myline").data(obj);  
+    myline.enter().append("line")
+          .attr("class", "myline")
+          .attr("x1", function(d) {
+            return d.x;
+          })
+          .attr("x2", function(d) {
+            return d.x;
+          })
+          .attr("y1", 0)
+          .attr("y2", 30)
+          .attr("stroke-dasharray", "2,2,2,2")
+          .attr("style", "stroke-width: 1; stroke: black;");
+
+    myline
+      .attr("x1", function(d) {
+          return d.x;
+      })
+      .attr("x2", function(d) {
+          return d.x;
+      })
+      .attr("y1", 0)
+      .attr("y2", height + 20);
+  };
 
   var svgContainer = d3.select("#chart").append("svg");
      svgContainer.attr("height", 0) 
@@ -98,6 +173,12 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
   x.domain(xMinMax); 
   y.domain(yMinMax);
 
+  var zoom = d3.behavior.zoom()
+      .x(x)
+      .y(y)
+      .scaleExtent([1, 10])
+      .on("zoom", zoomed);
+
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
@@ -113,48 +194,7 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
       .style("text-anchor", "end");
 
 
-//    svgContainer.append("line")
-//      <line x1="10" y1="30" x2="10" y2="80"
-
-
-  var drawLine = function(params) {
-
-    var obj = [params];
-    
-    var myg = svgContainer.selectAll(".myg").data(obj);
-    myg.enter()
-      .append("g")
-      .attr("class", "myg")
-      .attr("opacity", function(d) {
-          return d.opacity;
-      });
-
-    
-    var myline = myg.selectAll(".myline").data(obj);  
-    myline.enter().append("line")
-          .attr("class", "myline")
-          .attr("x1", function(d) {
-            return d.x;
-          })
-          .attr("x2", function(d) {
-            return d.x;
-          })
-          .attr("y1", 0)
-          .attr("y2", 30)
-          .attr("style", "stroke-width: 10; stroke: black;");
-
-    myline
-      .attr("x1", function(d) {
-          return d.x;
-      })
-      .attr("x2", function(d) {
-          return d.x;
-      })
-      .attr("y1", 0)
-      .attr("y2", height + 20)
-      .attr("style", "stroke-width: 10; stroke: black;");
-  }
-
+ 
   var drawChart = function () {
      chartPath = svg.datum(data).append("path");
 
@@ -217,5 +257,7 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
 
 
   };
+
+  d3.select("body").call(zoom);
   drawChart();
 });
