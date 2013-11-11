@@ -72,6 +72,16 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
 
   var zoomed = function () {
     console.log("zoom ...");
+    area = d3.svg.area()
+      .x(function(d) { 
+        return x(d[0]); 
+      })
+      .y0(height)
+      .y1(function(d) { 
+        return y(d[1]); 
+      });
+
+
     svg.select(".x.axis").call(xAxis);
     svg.select(".y.axis").call(yAxis);
   };
@@ -213,7 +223,16 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
       })
       .transition()
         .duration(3000)
-        .attr("d", area);
+        .attr("d", area)
+        .each("end", function () {
+          console.log("update ...");
+          chartPath
+           .attr("d", area);
+        });
+
+
+
+
   };
  
 
