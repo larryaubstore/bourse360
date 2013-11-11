@@ -1,16 +1,18 @@
-requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
+requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"  ], function( d3_mod, stockData, renderer, chartparams) {
 
 
   var data = stockData.data_values;
 
-  var margin = {top: 20, right: 20, bottom: 30, left: 50},
-      width = 960 - margin.left - margin.right,
-      height = 500 - margin.top - margin.bottom;
+//  var margin = {top: 20, right: 20, bottom: 30, left: 50},
+//      width = 960 - margin.left - margin.right,
+//      height = 500 - margin.top - margin.bottom;
 
   var x;
   var y;
   var xAxis;
   var yAxis;
+  var area;
+  var areaZero;
 
 
 
@@ -31,43 +33,28 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
        .ticks(15)
        .tickSize(-1)
        .orient("left");
+
+    area = d3.svg.area()
+      .x(function(d) { 
+        return x(d[0]); 
+      })
+      .y0(height)
+      .y1(function(d) { 
+        return y(d[1]); 
+      });
+
+    areaZero = d3.svg.area()
+      .x(function(d) { 
+        return x(d[0]); 
+      })
+      .y0(height)
+      .y1(function(d) { 
+        return 0; 
+      });
   }; 
 
-  initData(width, height); 
+  initData(chartparams.width, chartparams.height); 
 
-
-//  var x = d3.time.scale()
-//      .range([0, width]);
-//      
-//  var y = d3.scale.linear()
-//      .range([height, 0]);
-//
-//  var xAxis = d3.svg.axis()
-//      .scale(x)
-//      .orient("bottom");
-//
-//
-//  var yAxis = d3.svg.axis()
-//      .scale(y)
-//      .orient("left");
-
-  var area = d3.svg.area()
-    .x(function(d) { 
-      return x(d[0]); 
-    })
-    .y0(height)
-    .y1(function(d) { 
-      return y(d[1]); 
-    });
-
-  var areaZero = d3.svg.area()
-    .x(function(d) { 
-      return x(d[0]); 
-    })
-    .y0(height)
-    .y1(function(d) { 
-      return 0; 
-    });
 
 
   var zoomed = function () {
@@ -76,7 +63,7 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
       .x(function(d) { 
         return x(d[0]); 
       })
-      .y0(height)
+      .y0(chartparams.height)
       .y1(function(d) { 
         return y(d[1]); 
       });
@@ -93,66 +80,27 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
   var chartPath;
 
   var isAdded = false;
-  var drawLine = function(params) {
-
-    params.x = params.x + 50;
-
-    var obj = [params];
-    
-    var myg = svgContainer.selectAll(".myg").data(obj);
-    myg.enter()
-      .append("g")
-      .attr("class", "myg")
-      .attr("opacity", function(d) {
-          return d.opacity;
-      });
-
-    
-    var myline = myg.selectAll(".myline").data(obj);  
-    myline.enter().append("line")
-          .attr("class", "myline")
-          .attr("x1", function(d) {
-            return d.x;
-          })
-          .attr("x2", function(d) {
-            return d.x;
-          })
-          .attr("y1", 0)
-          .attr("y2", 30)
-          .attr("stroke-dasharray", "2,2,2,2")
-          .attr("style", "stroke-width: 1; stroke: black;");
-
-    myline
-      .attr("x1", function(d) {
-          return d.x;
-      })
-      .attr("x2", function(d) {
-          return d.x;
-      })
-      .attr("y1", 0)
-      .attr("y2", height + 20);
-  };
 
   var svgContainer = d3.select("#chart").append("svg");
      svgContainer.attr("height", 0) 
-      .attr("width", width + margin.left + margin.right)
+      .attr("width", chartparams.width + chartparams.margin.left + chartparams.margin.right)
      .on('mousemove', function () {
         var xMouse = d3.mouse(this)[0] - 50;
         var yMouse = d3.mouse(this)[1];
 
-        drawLine({opacity: 1, x: xMouse, y: yMouse });
+        renderer.drawLine({opacity: 1, x: xMouse, y: yMouse }, svgContainer);
         
       })
       .transition()
         .duration(1000)
-        .attr("height", height + margin.top + margin.bottom);
+        .attr("height", chartparams.height + chartparams.margin.top + chartparams.margin.bottom);
 
     svgContainer.on('click', function () {
       var xMouse = d3.mouse(this)[0] - 50;
       var yMouse = d3.mouse(this)[1];
 
-      var xInterpolate = 1 - (width - xMouse) / (width  );
-      var yInterpolate = 1 - (height - yMouse) / (height );
+      var xInterpolate = 1 - (chartparams.width - xMouse) / (chartparams.width  );
+      var yInterpolate = 1 - (chartparams.height - yMouse) / (chartparams.height );
 
       var xIndex = Math.ceil(xInterpolate * data.length);
       var yIndex = Math.ceil(yInterpolate * data.length);
@@ -167,7 +115,7 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
  
 
     svg = d3.select("svg").append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          .attr("transform", "translate(" + chartparams.margin.left + "," + chartparams.margin.top + ")");
 
 
   var xMinMax = d3.extent(data, function(d) {
@@ -190,7 +138,7 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
 
   svg.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
+      .attr("transform", "translate(0," + chartparams.height + ")")
       .call(xAxis);
 
   svg.append("g")
