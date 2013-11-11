@@ -3,7 +3,6 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
 
   var data = stockData.data_values;
 
-
   var margin = {top: 20, right: 20, bottom: 30, left: 50},
       width = 960 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom;
@@ -196,10 +195,12 @@ requirejs(["d3", "company/stockData"  ], function( d3_mod, stockData) {
 
  
   var drawChart = function () {
-     chartPath = svg.datum(data).append("path");
+
+     chartPath = svg.selectAll(".area").data([data]);
 
 
-      chartPath.attr("class", "area")
+     chartPath.enter().append("path")
+      .attr("class", "area")
       .attr("d", areaZero)
       .on('mousemove', function (d, i) {
         var epoch = (new Date).getTime();      
