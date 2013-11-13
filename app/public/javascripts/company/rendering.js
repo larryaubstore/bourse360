@@ -137,13 +137,33 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
       var obj = [{ x: xConvert, y: yConvert}];
       addCircle(obj, d3.mouse(this)[0], d3.mouse(this)[1], container);
     });
-  }
+  };
+
+  var drawXAxis = function (container, chartparams) {
+    container.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + chartparams.height + ")")
+        .call(chartparams.xAxis);
+  };
+
+  var drawYAxis = function (container, chartparams) {
+    container.append("g")
+        .attr("class", "y axis")
+        .call(chartparams.yAxis)
+      .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end");
+  };
 
 
   return {
     drawLine: drawLine,
     drawChart: drawChart,
     drawContainer: drawContainer,
+    drawXAxis: drawXAxis,
+    drawYAxis: drawYAxis,
     addCircle: addCircle
   };
 });

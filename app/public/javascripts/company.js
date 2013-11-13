@@ -22,17 +22,12 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
 
 
   var graphData = { zoom: 1 };
-  var pathSelection = [];
 
-
-  var isAdded = false;
 
   var svgContainer = d3.select("#chart").append("svg");
   renderer.drawContainer(svgContainer, data, chartparams); 
- 
-
   var svg = d3.select("svg").append("g")
-          .attr("transform", "translate(" + chartparams.margin.left + "," + chartparams.margin.top + ")");
+    .attr("transform", "translate(" + chartparams.margin.left + "," + chartparams.margin.top + ")");
 
 
 
@@ -43,21 +38,9 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
       .scaleExtent([1, 10])
       .on("zoom", zoomed);
 
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + chartparams.height + ")")
-      .call(chartparams.xAxis);
 
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(chartparams.yAxis)
-    .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end");
-
-
+  renderer.drawXAxis(svg, chartparams);
+  renderer.drawYAxis(svg, chartparams);
  
  
 
