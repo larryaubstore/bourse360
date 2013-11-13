@@ -6,8 +6,6 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
     params.x = params.x + 50;
 
     var obj = [params];
-    
-    //var myg = svgContainer.selectAll(".myg").data(obj);
     var myg = container.selectAll(".myg").data(obj);
     myg.enter()
       .append("g")
@@ -42,9 +40,48 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
       .attr("y2", chartparams.height + 20);
   };
 
+  var addCircle = function(arg, mouseX, mouseY, container) {
+
+      var circle = container
+        .append("circle");
+
+
+        circle.attr("cx", function (d) {
+          return mouseX;
+        })
+        .attr("cy", function (d) {
+          return mouseY;
+        })
+        .attr("r", 0)
+        .attr("fill", "red")
+        .transition()
+          .duration(500)
+          .attr("r", 5)
+          .transition()
+            .duration(500)
+            .attr("cx", function (d) {
+              return arg[0].x + 50;
+            })
+            .attr("cy", function (d) {
+              return arg[0].y + 15;
+            })
+            .each("end", function() {
+              d3.select(this).on("mouseover", function(d) {
+                    d3.select(this).transition()
+                      .duration(500)
+                      .attr("fill", "green");
+                  });
+
+              d3.select(this).on("mouseout", function(d) {
+                d3.select(this).transition()
+                  .duration(500)
+                  .attr("fill", "red");
+              });
+            });
+  };
+
+
   var drawChart = function (container, data, chartparams) {
-
-
       var chartPath = container.selectAll(".area").data([data.stock]);
        chartPath.enter().append("path")
         .attr("class", "area")
@@ -69,8 +106,44 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
   };
 
 
+  var drawContainer = function (container, data, chartparams) {
+
+    container.attr("height", 0) 
+      .attr("width", chartparams.width + chartparams.margin.left + chartparams.margin.right)
+      .on('mousemove', function () {
+        var xMouse = d3.mouse(this)[0] - 50;
+        var yMouse = d3.mouse(this)[1];
+
+        drawLine({opacity: 1, x: xMouse, y: yMouse }, container);
+        
+      })
+      .transition()
+        .duration(1000)
+        .attr("height", chartparams.height + chartparams.margin.top + chartparams.margin.bottom);
+
+    container.on('click', function () {
+      var xMouse = d3.mouse(this)[0] - 50;
+      var yMouse = d3.mouse(this)[1];
+
+      var xInterpolate = 1 - (chartparams.width - xMouse) / (chartparams.width  );
+      var yInterpolate = 1 - (chartparams.height - yMouse) / (chartparams.height );
+
+      var xIndex = Math.ceil(xInterpolate * data.stock.length);
+      var yIndex = Math.ceil(yInterpolate * data.stock.length);
+
+      var xConvert = chartparams.x(data.stock[xIndex][0]); 
+      var yConvert = chartparams.y(data.stock[xIndex][1]);
+
+      var obj = [{ x: xConvert, y: yConvert}];
+      addCircle(obj, d3.mouse(this)[0], d3.mouse(this)[1], container);
+    });
+  }
+
+
   return {
     drawLine: drawLine,
-    drawChart: drawChart
+    drawChart: drawChart,
+    drawContainer: drawContainer,
+    addCircle: addCircle
   };
 });
