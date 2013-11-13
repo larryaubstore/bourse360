@@ -1,4 +1,4 @@
-define(["d3"], function (d3_mod) {
+define(["d3", "company/stockData"], function (d3_mod, stockData) {
 
   var margin = {top: 20, right: 20, bottom: 30, left: 50};
   var width = 960 - margin.left - margin.right;
@@ -36,6 +36,18 @@ define(["d3"], function (d3_mod) {
        .tickSize(-1)
        .orient("left");
 
+  var xMinMax = d3.extent(stockData.data_values, function(d) {
+    return d[0];
+  });
+
+  var yMinMax = d3.extent(stockData.data_values, function(d) {
+    return d[1];
+  });
+
+
+  x.domain(xMinMax); 
+  y.domain(yMinMax);
+
   return {
     width: width,
     height: height,
@@ -45,6 +57,8 @@ define(["d3"], function (d3_mod) {
     area: area,
     areaZero: areaZero,
     xAxis: xAxis,
-    yAxis: yAxis
+    yAxis: yAxis,
+    xMinMax: xMinMax,
+    yMinMax: yMinMax
   };
 });

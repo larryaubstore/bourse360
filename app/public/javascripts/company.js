@@ -35,17 +35,7 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
           .attr("transform", "translate(" + chartparams.margin.left + "," + chartparams.margin.top + ")");
 
 
-  var xMinMax = d3.extent(data.stock, function(d) {
-    return d[0];
-  });
 
-  var yMinMax = d3.extent(data.stock, function(d) {
-    return d[1];
-  });
-
-
-  chartparams.x.domain(xMinMax); 
-  chartparams.y.domain(yMinMax);
 
   var zoom = d3.behavior.zoom()
       .x(chartparams.x)
