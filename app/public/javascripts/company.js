@@ -1,83 +1,44 @@
 requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"  ], function( d3_mod, stockData, renderer, chartparams) {
 
 
-  var data = stockData.data_values;
+  var data = { stock: stockData.data_values };
+  //data.area = chartparams.area;
+  //data.areaZero = chartparams.areaZero;
+
+
+  //var x = chartparams.x;
+  //var y = chartparams.y;
+  //var area = chartparams.area;
+  //var areaZero = chartparams.areaZero;
+
+
 
 //  var margin = {top: 20, right: 20, bottom: 30, left: 50},
 //      width = 960 - margin.left - margin.right,
 //      height = 500 - margin.top - margin.bottom;
 
-  var x;
-  var y;
-  var xAxis;
-  var yAxis;
-  var area;
-  var areaZero;
-
-
-
-  var initData = function (width, height) {
-    x = d3.time.scale()
-    .range([0, width]);
-    
-    y = d3.scale.linear()
-    .range([height, 0]);
-
-    xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom");
-
-
-    yAxis = d3.svg.axis()
-       .scale(y)
-       .ticks(15)
-       .tickSize(-1)
-       .orient("left");
-
-    area = d3.svg.area()
-      .x(function(d) { 
-        return x(d[0]); 
-      })
-      .y0(height)
-      .y1(function(d) { 
-        return y(d[1]); 
-      });
-
-    areaZero = d3.svg.area()
-      .x(function(d) { 
-        return x(d[0]); 
-      })
-      .y0(height)
-      .y1(function(d) { 
-        return 0; 
-      });
-  }; 
-
-  initData(chartparams.width, chartparams.height); 
-
 
 
   var zoomed = function () {
     console.log("zoom ...");
-    area = d3.svg.area()
-      .x(function(d) { 
-        return x(d[0]); 
-      })
-      .y0(chartparams.height)
-      .y1(function(d) { 
-        return y(d[1]); 
-      });
+//    data.area = d3.svg.area()
+//      .x(function(d) { 
+//        return x(d[0]); 
+//      })
+//      .y0(chartparams.height)
+//      .y1(function(d) { 
+//        return y(d[1]); 
+//      });
 
 
-    svg.select(".x.axis").call(xAxis);
-    svg.select(".y.axis").call(yAxis);
+    svg.select(".x.axis").call(chartparams.xAxis);
+    svg.select(".y.axis").call(chartparams.yAxis);
   };
 
 
   var graphData = { zoom: 1 };
   var pathSelection = [];
 
-  var chartPath;
 
   var isAdded = false;
 
@@ -102,11 +63,11 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
       var xInterpolate = 1 - (chartparams.width - xMouse) / (chartparams.width  );
       var yInterpolate = 1 - (chartparams.height - yMouse) / (chartparams.height );
 
-      var xIndex = Math.ceil(xInterpolate * data.length);
-      var yIndex = Math.ceil(yInterpolate * data.length);
+      var xIndex = Math.ceil(xInterpolate * data.stock.length);
+      var yIndex = Math.ceil(yInterpolate * data.stock.length);
 
-      var xConvert = x(data[xIndex][0]); 
-      var yConvert = y(data[xIndex][1]);
+      var xConvert = chartparams.x(data.stock[xIndex][0]); 
+      var yConvert = chartparams.y(data.stock[xIndex][1]);
 
       var obj = [{ x: xConvert, y: yConvert}];
       addCircle(obj, d3.mouse(this)[0], d3.mouse(this)[1]);
@@ -118,32 +79,32 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
           .attr("transform", "translate(" + chartparams.margin.left + "," + chartparams.margin.top + ")");
 
 
-  var xMinMax = d3.extent(data, function(d) {
+  var xMinMax = d3.extent(data.stock, function(d) {
     return d[0];
   });
 
-  var yMinMax = d3.extent(data, function(d) {
+  var yMinMax = d3.extent(data.stock, function(d) {
     return d[1];
   });
 
 
-  x.domain(xMinMax); 
-  y.domain(yMinMax);
+  chartparams.x.domain(xMinMax); 
+  chartparams.y.domain(yMinMax);
 
   var zoom = d3.behavior.zoom()
-      .x(x)
-      .y(y)
+      .x(chartparams.x)
+      .y(chartparams.y)
       .scaleExtent([1, 10])
       .on("zoom", zoomed);
 
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + chartparams.height + ")")
-      .call(xAxis);
+      .call(chartparams.xAxis);
 
   svg.append("g")
       .attr("class", "y axis")
-      .call(yAxis)
+      .call(chartparams.yAxis)
     .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
@@ -152,36 +113,6 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
 
 
  
-  var drawChart = function () {
-
-     chartPath = svg.selectAll(".area").data([data]);
-
-
-     chartPath.enter().append("path")
-      .attr("class", "area")
-      .attr("d", areaZero)
-      .on('mousemove', function (d, i) {
-        var epoch = (new Date).getTime();      
-        var x = d3.mouse(this)[0];
-        var y = d3.mouse(this)[1];
-      })
-      .on('mouseout', function (d, i) {
-        setTimeout(function () {
-        }, 600);
-      })
-      .transition()
-        .duration(3000)
-        .attr("d", area)
-        .each("end", function () {
-          console.log("update ...");
-          chartPath
-           .attr("d", area);
-        });
-
-
-
-
-  };
  
 
   var addCircle = function(arg, mouseX, mouseY) {
@@ -227,5 +158,5 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
   };
 
   d3.select("body").call(zoom);
-  drawChart();
+  renderer.drawChart(svg, data, chartparams);
 });

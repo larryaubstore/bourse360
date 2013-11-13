@@ -42,8 +42,35 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
       .attr("y2", chartparams.height + 20);
   };
 
+  var drawChart = function (container, data, chartparams) {
+
+
+      var chartPath = container.selectAll(".area").data([data.stock]);
+       chartPath.enter().append("path")
+        .attr("class", "area")
+        .attr("d", chartparams.areaZero)
+        .on('mousemove', function (d, i) {
+          var epoch = (new Date).getTime();      
+          var x = d3.mouse(this)[0];
+          var y = d3.mouse(this)[1];
+        })
+        .on('mouseout', function (d, i) {
+
+        })
+        .transition()
+          .duration(3000)
+          .attr("d", chartparams.area)
+          .each("end", function () {
+            console.log("update ...");
+
+            chartPath
+             .attr("d", chartparams.area);
+          });
+  };
+
 
   return {
-    drawLine: drawLine
+    drawLine: drawLine,
+    drawChart: drawChart
   };
 });
