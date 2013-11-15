@@ -128,7 +128,7 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
       var xInterpolate = 1 - (chartparams.width - xMouse) / (chartparams.width  );
       var yInterpolate = 1 - (chartparams.height - yMouse) / (chartparams.height );
 
-      var xIndex = Math.ceil(xInterpolate * data.stock.length);
+      var xIndex = Math.floor(xInterpolate * data.stock.length);
       var yIndex = Math.ceil(yInterpolate * data.stock.length);
 
       var xConvert = chartparams.x(data.stock[xIndex][0]); 
