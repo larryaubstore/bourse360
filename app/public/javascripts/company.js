@@ -5,19 +5,9 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
 
 
   var zoomed = function () {
-    console.log("zoom ...");
-//    data.area = d3.svg.area()
-//      .x(function(d) { 
-//        return x(d[0]); 
-//      })
-//      .y0(chartparams.height)
-//      .y1(function(d) { 
-//        return y(d[1]); 
-//      });
-
-
     svg.select(".x.axis").call(chartparams.xAxis);
     svg.select(".y.axis").call(chartparams.yAxis);
+    svg.selectAll(".area").attr("d", chartparams.area)
   };
 
 
