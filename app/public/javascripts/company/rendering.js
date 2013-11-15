@@ -41,6 +41,22 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
   };
 
   var addCircle = function(arg, mouseX, mouseY, container) {
+      var drag = d3.behavior.drag()
+        .on("drag", function(d,i) {
+          var arg = mouseToGraph(d3.mouse(this)[0], d3.mouse(this)[1]);
+          d3.select(this)
+            .attr("cx", function (d) {
+              return arg[0].x + 50;
+            })
+            .attr("cy", function (d) {
+              return arg[0].y + 15;
+            })
+            .attr("fill", "green");
+
+        });
+
+
+      var data = { arg: arg, mouseX: mouseX, mouseY: mouseY };
 
       var circle = container
         .append("circle");
@@ -77,6 +93,8 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
                   .duration(500)
                   .attr("fill", "red");
               });
+
+              d3.select(this).call(drag);
             });
   };
 
@@ -157,6 +175,24 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
         .style("text-anchor", "end");
   };
 
+  var mouseToGraph = function (xPos, yPos) {
+      var xMouse = xPos - 50;
+      var yMouse = yPos;
+
+      var xInterpolate = 1 - (chartparams.width - xMouse) / (chartparams.width  );
+      var yInterpolate = 1 - (chartparams.height - yMouse) / (chartparams.height );
+
+      var xIndex = Math.floor(xInterpolate * stockData.data_values.length);
+      var yIndex = Math.ceil(yInterpolate * stockData.data_values.length);
+
+      var xConvert = chartparams.x(stockData.data_values[xIndex][0]); 
+      var yConvert = chartparams.y(stockData.data_values[xIndex][1]);
+
+      var obj = [{ x: xConvert, y: yConvert}];
+
+      return obj;
+  };
+
 
   return {
     drawLine: drawLine,
@@ -164,6 +200,7 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
     drawContainer: drawContainer,
     drawXAxis: drawXAxis,
     drawYAxis: drawYAxis,
-    addCircle: addCircle
+    addCircle: addCircle,
+    mouseToGraph: mouseToGraph
   };
 });
