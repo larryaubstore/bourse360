@@ -100,7 +100,16 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
 
 
   var drawChart = function (container, data, chartparams) {
-      var chartPath = container.selectAll(".area").data([data.stock]);
+    
+      var gContainer = container.selectAll("#chartwrapper").data([data.stock]);
+  
+      gContainer = gContainer.enter().append("g")
+        .attr("id", "chartwrapper");
+
+
+      var chartPath = gContainer.selectAll(".area").data([data.stock]);
+
+
        chartPath.enter().append("path")
         .attr("class", "area")
         .attr("d", chartparams.areaZero)
@@ -113,7 +122,7 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
 
         })
         .transition()
-          .duration(3000)
+          .duration(2000)
           .attr("d", chartparams.area)
           .each("end", function () {
             console.log("update ...");
@@ -158,13 +167,28 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
   };
 
   var drawXAxis = function (container, chartparams) {
+
+    container.append("rect")
+      .attr("width", chartparams.width + 100)
+      .attr("height", "50px")
+      .attr("fill", "white")
+      .attr("transform", "translate(0," + chartparams.height + ")");
+
     container.append("g")
         .attr("class", "x axis")
+        .attr("opacity", "1")
         .attr("transform", "translate(0," + chartparams.height + ")")
         .call(chartparams.xAxis);
   };
 
   var drawYAxis = function (container, chartparams) {
+
+    container.append("rect")
+      .attr("width", 50)
+      .attr("height", chartparams.height + 100)
+      .attr("fill", "white")
+      .attr("transform", "translate(-50,-50)")
+
     container.append("g")
         .attr("class", "y axis")
         .call(chartparams.yAxis)

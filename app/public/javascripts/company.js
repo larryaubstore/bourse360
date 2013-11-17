@@ -7,7 +7,7 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
   var zoomed = function () {
     svg.select(".x.axis").call(chartparams.xAxis);
     svg.select(".y.axis").call(chartparams.yAxis);
-    svg.selectAll(".area").attr("d", chartparams.area)
+    svg.selectAll(".area").attr("d", chartparams.area);
   };
 
 
@@ -29,6 +29,7 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
       .on("zoom", zoomed);
 
 
+  renderer.drawChart(svg, data, chartparams);
   renderer.drawXAxis(svg, chartparams);
   renderer.drawYAxis(svg, chartparams);
  
@@ -36,5 +37,4 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
 
 
   d3.select("body").call(zoom);
-  renderer.drawChart(svg, data, chartparams);
 });
