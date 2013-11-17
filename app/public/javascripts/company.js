@@ -4,10 +4,40 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
   var data = { stock: stockData.data_values };
 
 
+  d3.translateXhook = function (p, l, translate) {
+    //translate[0] += p[0] - l[0];
+    //
+    var diff = p[0] - l[0];
+
+    if(translate[0] + diff < 0) {
+      return false;
+    } else {
+      return false;
+    }
+  };
+
   var zoomed = function () {
-    svg.select(".x.axis").call(chartparams.xAxis);
-    svg.select(".y.axis").call(chartparams.yAxis);
-    svg.selectAll(".area").attr("d", chartparams.area);
+
+    var translate = zoom.translate();
+
+    console.log("Translate: " + zoom.translate());
+      console.log("Scale: " + zoom.scale());
+      svg.select(".x.axis").call(chartparams.xAxis);
+      svg.select(".y.axis").call(chartparams.yAxis);
+      svg.selectAll(".area").attr("d", chartparams.area);
+      svgContainer.selectAll("circle")
+        .attr("cx", function(d) {
+          var oldPosition = d3.select(this).attr("cx");
+          var sum = oldPosition*zoom.scale(); 
+          return sum;
+        })
+        .attr("cy", function(d) {
+          var oldPosition = d3.select(this).attr("cy");
+          var sum = oldPosition*zoom.scale(); 
+          return sum;
+        });
+    //}
+
   };
 
 
