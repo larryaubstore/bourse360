@@ -4,7 +4,7 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
   var data = { stock: stockData.data_values };
 
 
-  d3.translateXhook = function (p, l, translate) {
+  d3.behavior.zoom.translateXhook = function (p, l, translate) {
     //translate[0] += p[0] - l[0];
     //
     var diff = p[0] - l[0];

@@ -40,7 +40,9 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
       .attr("y2", chartparams.height + 20);
   };
 
-  var addCircle = function(arg, mouseX, mouseY, container) {
+  //var addCircle = function(arg, mouseX, mouseY, container) {
+
+  var addCircle = function(chartparams, mouseX, mouseY, container) {
       var drag = d3.behavior.drag()
         .on("drag", function(d,i) {
           var arg = mouseToGraph(d3.mouse(this)[0], d3.mouse(this)[1]);
@@ -56,43 +58,44 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
         });
 
 
-      var data = { arg: arg, mouseX: mouseX, mouseY: mouseY };
+      //var data = { arg: arg, mouseX: mouseX, mouseY: mouseY };
 
-      var circle = container
-        .append("circle");
+      var circle = container.selectAll("circle")
+        .data(chartparams.circles, function(d) { return d.index; });
 
 
-        circle.attr("cx", function (d) {
-          return mouseX;
-        })
-        .attr("cy", function (d) {
-          return mouseY;
-        })
-        .attr("r", 0)
-        .attr("fill", "red")
-        .transition()
-          .duration(500)
-          .attr("r", 5)
+        circle.enter().append("circle")
+          .attr("cx", function (d) {
+            return mouseX;
+          })
+          .attr("cy", function (d) {
+            return mouseY;
+          })
+          .attr("r", 0)
+          .attr("fill", "red")
           .transition()
             .duration(500)
-            .attr("cx", function (d) {
-              return arg[0].x + 50;
-            })
-            .attr("cy", function (d) {
-              return arg[0].y + 15;
-            })
-            .each("end", function() {
-              d3.select(this).on("mouseover", function(d) {
-                    d3.select(this).transition()
-                      .duration(500)
-                      .attr("fill", "green");
-                  });
+            .attr("r", 5)
+            .transition()
+              .duration(500)
+              .attr("cx", function (d) {
+                return d.x + 50;
+              })
+              .attr("cy", function (d) {
+                return d.y + 15;
+              })
+              .each("end", function() {
+                d3.select(this).on("mouseover", function(d) {
+                      d3.select(this).transition()
+                        .duration(500)
+                        .attr("fill", "green");
+                    });
 
-              d3.select(this).on("mouseout", function(d) {
-                d3.select(this).transition()
-                  .duration(500)
-                  .attr("fill", "red");
-              });
+                d3.select(this).on("mouseout", function(d) {
+                  d3.select(this).transition()
+                    .duration(500)
+                    .attr("fill", "red");
+                });
 
               d3.select(this).call(drag);
             });
@@ -161,8 +164,15 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
       var xConvert = chartparams.x(data.stock[xIndex][0]); 
       var yConvert = chartparams.y(data.stock[xIndex][1]);
 
-      var obj = [{ x: xConvert, y: yConvert}];
-      addCircle(obj, d3.mouse(this)[0], d3.mouse(this)[1], container);
+      var obj = { index: new Date().getTime(), x: xConvert, y: yConvert};
+
+     
+      //chartparams.circles.push({ convert: obj, mouseX: d3.mouse(this)[0], mouseY: d3.mouse(this)[1]}); 
+      //
+      chartparams.circles.push(obj);
+
+      //addCircle(obj, d3.mouse(this)[0], d3.mouse(this)[1], container);
+      addCircle(chartparams, d3.mouse(this)[0], d3.mouse(this)[1], container);
     });
   };
 
