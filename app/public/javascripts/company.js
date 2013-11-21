@@ -20,23 +20,19 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
 
     var translate = zoom.translate();
 
-    console.log("Translate: " + zoom.translate());
-      console.log("Scale: " + zoom.scale());
-      svg.select(".x.axis").call(chartparams.xAxis);
-      svg.select(".y.axis").call(chartparams.yAxis);
-      svg.selectAll(".area").attr("d", chartparams.area);
-      svgContainer.selectAll("circle")
-        .attr("cx", function(d) {
-          var oldPosition = d3.select(this).attr("cx");
-          var sum = oldPosition*zoom.scale(); 
-          return sum;
-        })
-        .attr("cy", function(d) {
-          var oldPosition = d3.select(this).attr("cy");
-          var sum = oldPosition*zoom.scale(); 
-          return sum;
-        });
-    //}
+    svg.select(".x.axis").call(chartparams.xAxis);
+    svg.select(".y.axis").call(chartparams.yAxis);
+    svg.selectAll(".area").attr("d", chartparams.area);
+
+    var circle = svgContainer.selectAll("circle")
+        .data(chartparams.circles, function(d) { return d.index; });
+
+    circle.attr("cx", function (d) {
+      return chartparams.x(data.stock[d.index][0]) + 50; 
+    })
+    .attr("cy", function (d) {
+      return chartparams.y(data.stock[d.index][1]) + 15; 
+    });
 
   };
 

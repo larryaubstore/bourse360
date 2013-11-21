@@ -40,9 +40,7 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
       .attr("y2", chartparams.height + 20);
   };
 
-  //var addCircle = function(arg, mouseX, mouseY, container) {
-
-  var addCircle = function(chartparams, mouseX, mouseY, container) {
+  var addCircle = function(chartparams, mouseX, mouseY, container, data) {
       var drag = d3.behavior.drag()
         .on("drag", function(d,i) {
           var arg = mouseToGraph(d3.mouse(this)[0], d3.mouse(this)[1]);
@@ -57,8 +55,6 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
 
         });
 
-
-      //var data = { arg: arg, mouseX: mouseX, mouseY: mouseY };
 
       var circle = container.selectAll("circle")
         .data(chartparams.circles, function(d) { return d.index; });
@@ -79,10 +75,10 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
             .transition()
               .duration(500)
               .attr("cx", function (d) {
-                return d.x + 50;
+                return chartparams.x(data.stock[d.index][0]) + 50; 
               })
               .attr("cy", function (d) {
-                return d.y + 15;
+                return chartparams.y(data.stock[d.index][1]) + 15; 
               })
               .each("end", function() {
                 d3.select(this).on("mouseover", function(d) {
@@ -96,8 +92,7 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
                     .duration(500)
                     .attr("fill", "red");
                 });
-
-              d3.select(this).call(drag);
+                d3.select(this).call(drag);
             });
   };
 
@@ -164,15 +159,13 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
       var xConvert = chartparams.x(data.stock[xIndex][0]); 
       var yConvert = chartparams.y(data.stock[xIndex][1]);
 
-      var obj = { index: new Date().getTime(), x: xConvert, y: yConvert};
+      //var obj = { index: new Date().getTime(), x: xConvert, y: yConvert};
+
+      var obj = { index: new Date().getTime(), index: xIndex};
 
      
-      //chartparams.circles.push({ convert: obj, mouseX: d3.mouse(this)[0], mouseY: d3.mouse(this)[1]}); 
-      //
       chartparams.circles.push(obj);
-
-      //addCircle(obj, d3.mouse(this)[0], d3.mouse(this)[1], container);
-      addCircle(chartparams, d3.mouse(this)[0], d3.mouse(this)[1], container);
+      addCircle(chartparams, d3.mouse(this)[0], d3.mouse(this)[1], container, data);
     });
   };
 
