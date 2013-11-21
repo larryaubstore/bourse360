@@ -25,7 +25,7 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
     svg.selectAll(".area").attr("d", chartparams.area);
 
     var circle = svgContainer.selectAll("circle")
-        .data(chartparams.circles, function(d) { return d.index; });
+        .data(chartparams.circles, function(d) { return d.key; });
 
     circle.attr("cx", function (d) {
       return chartparams.x(data.stock[d.index][0]) + 50; 

@@ -44,15 +44,31 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
       var drag = d3.behavior.drag()
         .on("drag", function(d,i) {
           var arg = mouseToGraph(d3.mouse(this)[0], d3.mouse(this)[1]);
-          d3.select(this)
-            .attr("cx", function (d) {
-              return arg[0].x + 50;
-            })
-            .attr("cy", function (d) {
-              return arg[0].y + 15;
-            })
-            .attr("fill", "green");
 
+
+          var index = d3.select(this).data()[0].index;
+          console.log("INDEX -> " + d3.select(this).data()[0].index);
+
+          var element;
+          for(var i = 0; i < chartparams.circles.length; i++) {
+
+            element = chartparams.circles[i];
+            if(element.index === index) {
+              element.index = arg[0].index;
+            } 
+          } 
+        
+
+          var svgContainer = d3.select("#chart");
+          var circle = svgContainer.selectAll("circle")
+              .data(chartparams.circles, function(d) { return d.key; });
+
+          circle.attr("cx", function (d) {
+            return chartparams.x(data.stock[d.index][0]) + 50; 
+          })
+          .attr("cy", function (d) {
+            return chartparams.y(data.stock[d.index][1]) + 15; 
+          });
         });
 
 
@@ -161,7 +177,7 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
 
       //var obj = { index: new Date().getTime(), x: xConvert, y: yConvert};
 
-      var obj = { index: new Date().getTime(), index: xIndex};
+      var obj = { key: new Date().getTime(), index: xIndex};
 
      
       chartparams.circles.push(obj);
@@ -215,7 +231,7 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
       var xConvert = chartparams.x(stockData.data_values[xIndex][0]); 
       var yConvert = chartparams.y(stockData.data_values[xIndex][1]);
 
-      var obj = [{ x: xConvert, y: yConvert}];
+      var obj = [{ x: xConvert, y: yConvert, index: xIndex}];
 
       return obj;
   };
