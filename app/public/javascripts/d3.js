@@ -1145,14 +1145,28 @@ d3 = function() {
     }
     function translateTo(p, l) {
       l = point(l);
-      if( typeof(d3.translateXhook) === "function" ) {
-        if(d3.translateXhook(p, l, translate) === true) {
-          translate[0] += p[0] - l[0];
-        }
+
+      if( typeof(translateXhook) === "function" ) {
+
+        if(translateXhook(p, l, translate) === true) {
+
+          if(translate[0] + p[0] - l[0] > -5) {
+            translate[0] = 0;
+          } else {
+            translate[0] += p[0] - l[0];
+          }
+        } 
       } else {
         translate[0] += p[0] - l[0];
       }
-      translate[1] += p[1] - l[1];
+
+      if( typeof(translateYhook) === "function" ) {
+        if(translateYhook(p, l, translate) === true) {
+          translate[1] += p[1] - l[1];
+        } 
+      } else {
+          translate[1] += p[1] - l[1];
+      }
     }
     function rescale() {
       if (x1) x1.domain(x0.range().map(function(x) {

@@ -4,18 +4,6 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
   var data = { stock: stockData.data_values };
 
 
-  d3.behavior.zoom.translateXhook = function (p, l, translate) {
-    //translate[0] += p[0] - l[0];
-    //
-    var diff = p[0] - l[0];
-
-    if(translate[0] + diff < 0) {
-      return false;
-    } else {
-      return false;
-    }
-  };
-
   var zoomed = function () {
 
     var translate = zoom.translate();
@@ -53,6 +41,19 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
       .y(chartparams.y)
       .scaleExtent([1, 10])
       .on("zoom", zoomed);
+
+  window.translateXhook = function (p, l, translate) {
+
+
+    //translate[0] += p[0] - l[0];
+    //
+    var diff = p[0] - l[0];
+    if(translate[0] + diff < 0) {
+      return true;
+    } else {
+      return true;
+    }
+  };
 
 
   renderer.drawChart(svg, data, chartparams);

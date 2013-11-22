@@ -163,6 +163,8 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
         .attr("height", chartparams.height + chartparams.margin.top + chartparams.margin.bottom);
 
     container.on('click', function () {
+
+      console.log("click ...");
       var xMouse = d3.mouse(this)[0] - 50;
       var yMouse = d3.mouse(this)[1];
 
@@ -174,9 +176,6 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
 
       var xConvert = chartparams.x(data.stock[xIndex][0]); 
       var yConvert = chartparams.y(data.stock[xIndex][1]);
-
-      //var obj = { index: new Date().getTime(), x: xConvert, y: yConvert};
-
       var obj = { key: new Date().getTime(), index: xIndex};
 
      
