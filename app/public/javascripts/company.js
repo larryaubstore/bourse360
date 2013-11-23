@@ -7,7 +7,12 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
   var zoomed = function () {
 
     var translate = zoom.translate();
+    var scale = zoom.scale();
 
+    console.log("translate => " + translate[0]);
+
+    chartparams.translateX = translate[0];
+    chartparams.scaleX = scale;
     svg.select(".x.axis").call(chartparams.xAxis);
     svg.select(".y.axis").call(chartparams.yAxis);
     svg.selectAll(".area").attr("d", chartparams.area);
@@ -43,10 +48,6 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
       .on("zoom", zoomed);
 
   window.translateXhook = function (p, l, translate) {
-
-
-    //translate[0] += p[0] - l[0];
-    //
     var diff = p[0] - l[0];
     if(translate[0] + diff < 0) {
       return true;

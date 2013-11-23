@@ -165,13 +165,19 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
     container.on('click', function () {
 
       console.log("click ...");
+
+      console.log("SCALE -> " + chartparams.scaleX);
       var xMouse = d3.mouse(this)[0] - 50;
       var yMouse = d3.mouse(this)[1];
 
       var xInterpolate = 1 - (chartparams.width - xMouse) / (chartparams.width  );
       var yInterpolate = 1 - (chartparams.height - yMouse) / (chartparams.height );
 
-      var xIndex = Math.floor(xInterpolate * data.stock.length);
+
+      var offset = 1 - (chartparams.width - Math.abs(chartparams.translateX) ) / chartparams.width;
+      console.log("xInterpolate => " + xInterpolate + " -- offset => " + offset);
+
+      var xIndex = Math.floor( (xInterpolate + offset) * data.stock.length);
       var yIndex = Math.ceil(yInterpolate * data.stock.length);
 
       var xConvert = chartparams.x(data.stock[xIndex][0]); 
