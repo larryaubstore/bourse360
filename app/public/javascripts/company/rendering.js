@@ -164,9 +164,6 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
 
     container.on('click', function () {
 
-      console.log("click ...");
-
-      console.log("SCALE -> " + chartparams.scaleX);
       var xMouse = d3.mouse(this)[0] - 50;
       var yMouse = d3.mouse(this)[1];
 
@@ -174,19 +171,16 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
       var yInterpolate = 1 - (chartparams.height - yMouse) / (chartparams.height );
 
 
-      var offset = 1 - (chartparams.width - Math.abs(chartparams.translateX) ) / chartparams.width;
-      console.log("xInterpolate => " + xInterpolate + " -- offset => " + offset);
+      var offset = (1 - (chartparams.width - Math.abs(chartparams.translateX) ) / chartparams.width); 
+      var xIndex = Math.floor( ((xInterpolate + offset ) * data.stock.length) / chartparams.scale);
 
-      var xIndex = Math.floor( (xInterpolate + offset) * data.stock.length);
-      var yIndex = Math.ceil(yInterpolate * data.stock.length);
-
-      var xConvert = chartparams.x(data.stock[xIndex][0]); 
-      var yConvert = chartparams.y(data.stock[xIndex][1]);
-      var obj = { key: new Date().getTime(), index: xIndex};
-
-     
-      chartparams.circles.push(obj);
-      addCircle(chartparams, d3.mouse(this)[0], d3.mouse(this)[1], container, data);
+      if(xIndex <= data.stock.length) {
+        var xConvert = chartparams.x(data.stock[xIndex][0]); 
+        var yConvert = chartparams.y(data.stock[xIndex][1]);
+        var obj = { key: new Date().getTime(), index: xIndex};
+        chartparams.circles.push(obj);
+        addCircle(chartparams, d3.mouse(this)[0], d3.mouse(this)[1], container, data);
+      }
     });
   };
 

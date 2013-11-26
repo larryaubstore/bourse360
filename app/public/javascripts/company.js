@@ -10,9 +10,10 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
     var scale = zoom.scale();
 
     console.log("translate => " + translate[0]);
+    console.log("scale     => " + scale);
 
     chartparams.translateX = translate[0];
-    chartparams.scaleX = scale;
+    chartparams.scale = scale;
     svg.select(".x.axis").call(chartparams.xAxis);
     svg.select(".y.axis").call(chartparams.yAxis);
     svg.selectAll(".area").attr("d", chartparams.area);
