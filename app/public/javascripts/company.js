@@ -1,4 +1,4 @@
-requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"  ], function( d3_mod, stockData, renderer, chartparams) {
+define(["d3", "company/stockData", "company/rendering", "company/chartparams"  ], function( d3_mod, stockData, renderer, chartparams) {
 
 
   var data = { stock: stockData.data_values };
@@ -61,9 +61,15 @@ requirejs(["d3", "company/stockData", "company/rendering", "company/chartparams"
   renderer.drawChart(svg, data, chartparams);
   renderer.drawXAxis(svg, chartparams);
   renderer.drawYAxis(svg, chartparams);
- 
- 
-
 
   d3.select("body").call(zoom);
+
+
+  // d3_mod, stockData, renderer, chartparams
+  return {
+    d3: d3,
+    data: data,
+    chartparams: chartparams 
+  };
+  
 });

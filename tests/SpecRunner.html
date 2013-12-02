@@ -17,16 +17,18 @@
       paths: {spec: '../../../tests/spec',
               src: '../../../tests/src',
               tests: '../../../tests'
-             }
+             },
+      urlArgs: "bust=" + (new Date()).getTime()
     });
     require([
 
               "tests/jquery",
-              "tests/jasmine-jquery",
+              //"tests/jasmine-jquery",
               "src/Player",
               "src/Song",
               "spec/SpecHelper",
-              "spec/PlayerSpec"
+              "spec/PlayerSpec",  
+              "spec/d3ChartSpec"
         ], function () {
             jasmine.getEnv().addReporter(new jasmine.HtmlReporter());
             jasmine.getEnv().execute();
