@@ -15,10 +15,14 @@
       baseUrl: "../app/public/javascripts/",
 
       paths: {spec: '../../../tests/spec',
-              src: '../../../tests/src'
+              src: '../../../tests/src',
+              tests: '../../../tests'
              }
     });
-    require([ 
+    require([
+
+              "tests/jquery",
+              "tests/jasmine-jquery",
               "src/Player",
               "src/Song",
               "spec/SpecHelper",
