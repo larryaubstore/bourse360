@@ -113,15 +113,15 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
   };
 
 
-  var drawChart = function (container, data, chartparams) {
+  var drawChart = function (container, chartparams) {
     
-      var gContainer = container.selectAll("#chartwrapper").data([data.stock]);
+      var gContainer = container.selectAll("#chartwrapper").data([chartparams.data.stock]);
   
       gContainer = gContainer.enter().append("g")
         .attr("id", "chartwrapper");
 
 
-      var chartPath = gContainer.selectAll(".area").data([data.stock]);
+      var chartPath = gContainer.selectAll(".area").data([chartparams.data.stock]);
 
 
        chartPath.enter().append("path")
@@ -147,7 +147,7 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
   };
 
 
-  var drawContainer = function (container, data, chartparams) {
+  var drawContainer = function (container, chartparams) {
 
     container.attr("height", 0) 
       .attr("width", chartparams.width + chartparams.margin.left + chartparams.margin.right)
@@ -172,14 +172,14 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
 
 
       var offset = (1 - (chartparams.width - Math.abs(chartparams.translateX) ) / chartparams.width); 
-      var xIndex = Math.floor( ((xInterpolate + offset ) * data.stock.length) / chartparams.scale);
+      var xIndex = Math.floor( ((xInterpolate + offset ) * chartparams.data.stock.length) / chartparams.scale);
 
-      if(xIndex <= data.stock.length) {
-        var xConvert = chartparams.x(data.stock[xIndex][0]); 
-        var yConvert = chartparams.y(data.stock[xIndex][1]);
+      if(xIndex <= chartparams.data.stock.length) {
+        var xConvert = chartparams.x(chartparams.data.stock[xIndex][0]); 
+        var yConvert = chartparams.y(chartparams.data.stock[xIndex][1]);
         var obj = { key: new Date().getTime(), index: xIndex};
         chartparams.circles.push(obj);
-        addCircle(chartparams, d3.mouse(this)[0], d3.mouse(this)[1], container, data);
+        addCircle(chartparams, d3.mouse(this)[0], d3.mouse(this)[1], container, chartparams.data);
       }
     });
   };
@@ -235,6 +235,23 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
       return obj;
   };
 
+  var render = function () {
+    var svgContainer = d3.select("#chart").append("svg");
+    drawContainer(svgContainer, chartparams); 
+    var svg = d3.select("svg").append("g")
+      .attr("transform", "translate(" + chartparams.margin.left + "," + chartparams.margin.top + ")");
+
+
+    drawChart(svg, chartparams);
+    drawXAxis(svg, chartparams);
+    drawYAxis(svg, chartparams);
+
+
+    d3.select("body").call(chartparams.zoom);
+    //
+  };
+
+
 
   return {
     drawLine: drawLine,
@@ -243,6 +260,8 @@ define(["d3", "company/stockData", "company/chartparams"  ], function( d3_mod, s
     drawXAxis: drawXAxis,
     drawYAxis: drawYAxis,
     addCircle: addCircle,
-    mouseToGraph: mouseToGraph
+    mouseToGraph: mouseToGraph,
+    drawChart: drawChart,
+    render: render
   };
 });

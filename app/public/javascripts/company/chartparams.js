@@ -1,4 +1,4 @@
-define(["d3", "company/stockData"], function (d3_mod, stockData) {
+define(["d3", "company/stockData", "company/chartparams"], function (d3_mod, stockData, chartparams) {
 
   var circles = [];
 
@@ -52,6 +52,40 @@ define(["d3", "company/stockData"], function (d3_mod, stockData) {
   x.domain(xMinMax); 
   y.domain(yMinMax);
 
+  var data = { stock: stockData.data_values };
+  var zoomed = function (params) {
+
+    debugger;
+    //var svg = chartparams.svg;
+    var translate = zoom.translate();
+    var myscale = zoom.scale();
+
+    translateX = translate[0];
+    scale = myscale;
+    svg.select(".x.axis").call(xAxis);
+    svg.select(".y.axis").call(yAxis);
+    svg.selectAll(".area").attr("d", area);
+
+    var circle = svgContainer.selectAll("circle")
+        .data(circles, function(d) { return d.key; });
+
+    circle.attr("cx", function (d) {
+      return x(data.stock[d.index][0]) + 50; 
+    })
+    .attr("cy", function (d) {
+      return y(data.stock[d.index][1]) + 15; 
+    });
+
+  };
+
+
+  var zoom = d3.behavior.zoom()
+      .x(x)
+      .y(y)
+      .scaleExtent([1, 10])
+      .on("zoom", zoomed);
+
+
   return {
     width: width,
     height: height,
@@ -66,6 +100,8 @@ define(["d3", "company/stockData"], function (d3_mod, stockData) {
     yMinMax: yMinMax,
     circles: circles,
     translateX: translateX,
-    scale: scale
+    scale: scale,
+    zoom: zoom,
+    data: data
   };
 });
