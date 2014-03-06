@@ -56,7 +56,7 @@ define(["d3", "company/stockData", "company/chartparams"], function (d3_mod, sto
   var zoomed = function (params) {
 
     debugger;
-    //var svg = chartparams.svg;
+    var svg = params.svg;
     var translate = zoom.translate();
     var myscale = zoom.scale();
 
