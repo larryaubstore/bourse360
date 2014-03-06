@@ -3,9 +3,9 @@ define([ "../common/faceThumbnail", "../common/svg", "../common/d3"  ], function
   var d3 = d3Mod;
   var data = [
     { 
-      r: 10,
-      x: 45,
-      y: 45,
+      r: 80,
+      x: 345,
+      y: 245,
       color: "red"
     }
   ];

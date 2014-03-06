@@ -1,15 +1,4 @@
-// d3 -> undefined
 define(["../common/faceThumbnail"  ], function( faceThumbnail) {
-
-//  debugger;
-//  var data = [
-//    { 
-//      r: 1,
-//      x: 5,
-//      y: 5,
-//      color: "red"
-//    }
-//  ];
 
 
   var Render = function (svg, data) {
@@ -19,16 +8,15 @@ define(["../common/faceThumbnail"  ], function( faceThumbnail) {
       .attr("r", function(d) { return d.r; })
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
-      .style("fill", function(d) { return d.color; });
+//      .style("fill", function(d) { return d.color; });
+      .attr("fill", function(d) { return "none"; })
+      .attr("stroke", function(d) { return d.color; })
+      .attr("stroke-width", function(d) { return d.r / 2; })
+      
   };
 
 
   return {
     Render: Render
   };
-  
-  //Render(svg, data);
-
-  
-
 });
