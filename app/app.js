@@ -9,6 +9,8 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var company = require('./routes/company/company');
+var tesla = require('./routes/tesla/tesla');
+
 var requirejs = require("requirejs");
 
 var app = express();
@@ -30,6 +32,7 @@ app.use(app.router);
 app.use(require('stylus').middleware(__dirname + '/public'));
 
 app.use(express.static(path.join(__dirname + "/public")));
+app.use(express.static(path.join(__dirname + '/public/common')));
 
 // development only
 if ('development' == app.get('env')) {
@@ -40,6 +43,7 @@ app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/company/:id', company.show);
 app.get('/chart/:id', chart.show);
+app.get('/tesla', tesla.show);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
