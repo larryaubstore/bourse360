@@ -1,4 +1,4 @@
-define(["../common/faceThumbnail"  ], function( faceThumbnail) {
+define(function( ) {
 
 
   var Render = function (svg, data) {
