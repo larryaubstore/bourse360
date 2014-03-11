@@ -39,6 +39,14 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+//requirejs.config({
+//    shim: {
+//        'd3': {
+//            exports: 'd3'
+//        }
+//  }
+//});
+
 app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/company/:id', company.show);
