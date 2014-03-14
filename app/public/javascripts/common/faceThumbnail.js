@@ -1,11 +1,16 @@
-define(function( ) {
+define(function() {
 
 
 
-  var Render = function (svg, data) {
-    svg.selectAll("circle")
-      .data(data)
-    .enter().append("circle")
+  var Render = function (svg, data, popupDebug) {
+
+    console.log(data[0].r);
+    var faceThumbnailMod = this;
+    var circle = svg.selectAll("circle")
+      .data(data);
+
+
+    circle.enter().append("circle")
       .attr("r", function(d) { return d.r; })
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
@@ -27,10 +32,19 @@ define(function( ) {
     })
 
     .on("dblclick", function() {
-
-      //d3.select('#slider_facer').call(d3.slider().axis(true).min(2000).max(2100).step(5));
-      debugger;
+      popupDebug.Render(svg, data, faceThumbnailMod);
     });
+
+
+    circle
+      .attr("r", function(d) { return d.r; })
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .attr("fill", function(d) { return "none"; })
+      .attr("stroke", function(d) { return d.color; })
+      .attr("stroke-width", function(d) { return d.r / 3.5; });
+
+
   };
 
 

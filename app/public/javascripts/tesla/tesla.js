@@ -3,7 +3,7 @@ define([ "../common/faceThumbnail",
          "d3",
          "../common/image",
          "../common/popupDebug"
-          ], function( faceThumbnail, svgMod, ignore, imageMod, popup) {
+          ], function( faceThumbnail, svgMod, ignore, imageMod, popupDebug) {
 
   var data = [
     { 
@@ -13,15 +13,19 @@ define([ "../common/faceThumbnail",
       color: "green",
       imagePath: "/images/jack.jpg",
       imageWidth: 253, 
-      imageHeight: 349
+      imageHeight: 349,
+      index: 1
     }
   ];
 
-  window.zoom = d3.behavior.zoom();
   var svg = svgMod.Render(500, 500); 
-  imageMod.Render(svg, data);
-  faceThumbnail.Render(svg, data);
 
-  popup.Render(svg, data);
+  window.svg = svg;
+  window.popupDebug = popupDebug;
+
+  imageMod.Render(svg, data);
+  faceThumbnail.Render(svg, data, popupDebug);
+
+  //popup.Render(svg, data);
 
 });
