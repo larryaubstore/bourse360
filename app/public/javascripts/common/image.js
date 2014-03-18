@@ -29,36 +29,56 @@ define(function( ) {
 //  <image xlink:href="boston.jpg" width="100%" height="100%" clip-path="url(#clip)"/>
 
 
-    var defs = svg.append("defs");
+    var defs = svg.selectAll("defs").data(data); 
 
-    defs.append("rect")
-      .attr("id", "rect")
-      .attr("x", "165")
-      .attr("y", "165")
-      .attr("width", "50%")
-      .attr("height", "50%")
+    var def = defs.enter().append("rect")
+      .attr("id", function(d) {
+        return "rect" + d.index;
+      })
+      .attr("x", function(d) {
+        return d.x;
+      })
+      .attr("y", function(d) {
+        return d.y;
+      })
+      .attr("width", function(d) {
+        return d.imageWidth; 
+      })
+      .attr("height", function(d) {
+        return d.imageHeight;
+      })
       .attr("rx", "120")
+      .append("clipPath")
+        .attr("id", function(d) {
+          return "clip" + d.index;
+        })
+        .append("use")
+        .attr("xlink:href", function(d) {
+          return "#rect" + d.index;
+        });
 
-    clippath = svg.append("clipPath")
-      .attr("id", "clip");
+
+    def.attr("xlink:href", function(d) {
+      return "#rect" + d.index;
+    });
 
 
-    clippath.append("use")
-      .attr("xlink:href", "#rect");
+    var images = svg.selectAll("image").data(data);
 
-
-    svg.append("use")
-      .attr("xlink:href", "#rect")
-
-    svg.append("image")
+    images.enter().append("image")
       .attr("xlink:href", "images/jack.jpg")
-      .attr("width", "50%")
-      .attr("height", "50%")
+      .attr("width", "250")
+      .attr("height", "250")
 
-      .attr("x", "150")
-      .attr("y", "150")
-
-      .attr("clip-path", "url(#clip)")
+      .attr("x", function(d) {
+        return d.x;
+      })
+      .attr("y", function(d) {
+        return d.y; 
+      })
+      .attr("clip-path", function(d) {
+        return "url(#clip" + d.index + ")";
+      });
 
 
   };

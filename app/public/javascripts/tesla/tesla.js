@@ -15,10 +15,21 @@ define([ "../common/faceThumbnail",
       imageWidth: 253, 
       imageHeight: 349,
       index: 1
+    },
+    { 
+      r: 145,
+      x: 490,
+      y: 290,
+      color: "green",
+      imagePath: "/images/pauline.jpg",
+      imageWidth: 253, 
+      imageHeight: 349,
+      index: 2
     }
+
   ];
 
-  var svg = svgMod.Render(500, 500); 
+  var svg = svgMod.Render(990, 990); 
 
   window.svg = svg;
   window.popupDebug = popupDebug;
