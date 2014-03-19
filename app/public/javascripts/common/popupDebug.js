@@ -1,47 +1,56 @@
 define(["../common/d3.tip", "../common/d3.slider"], function (ignore, ignore) {
 
   var Render = function (svg, data, circleRenderer) {
-    if(!window.tipCircle) {
-      var tipCircle = d3.tip()
-        .attr('style', 'line-height: 1;' +
-                       'font-weight: bold;' +
-                       'padding: 21px;' + 
-                       'background: rgba(0, 0, 0, 0.5);' +
-                       'color: #fff;' +
-                       'border-radius: 2px;' +
-                       'width:300px;' + 
-                       'position:absolute')
-        .offset([-40, 0])
-        .attr("id", "popupDebug")
-        .html(function(d) {
-          return "<div style='padding-bottom:10px'><strong>Frequency:</strong></div> <span style='color:red'>" + "</span>" +
-          "<div class='slider'></div><div style='width:100px;height:50px;background-color:red;position:relative;z-index:5;margin-top:10px;' onClick='window.hidePopup();'>Close</div>";
+
+
+      window.circleRenderer = circleRenderer;
+      window.svg = svg;
+      window.data = data;
+
+      var rects = d3.select("body").selectAll("div.debug").data(data);
+      var container = rects.enter().append("div")
+        .attr("class", "debug")
+        .style("background-color", "gray")
+        .style("position", "absolute")
+        .style("padding", "20px")
+        .style("display", function(d) {
+          if(d.showDebug) {
+            return "block";
+          } else {
+            return "none";
+          }
+        })
+        .style("top", function(d) {
+          return (d.y - 100) + "px";
+        })
+        .style("left", function(d) {
+          return d.x + "px";
         });
 
+      container.append("div")
+        .style("float", "left")
+        .style("width", "100px")
+        .html("Radius");
 
-      window.hidePopup = function () {
-        document.getElementById("popupDebug").style.display = 'none';
-      };
-
-      window.showPopup = function () {
-        document.getElementById("popupDebug").style.display = 'block';
-      };
-
-      window.tipCircle = tipCircle;
-      svg.call(tipCircle);
-      tipCircle.show();
-
-
-      window.circleRenderer = circleRenderer; 
-      d3.select('.slider').call(d3.slider().axis(true).min(0).max(data[0].r * 2).step(5).value(data[0].r).on("slide", function(evt, value) {
-        data[0].r = value;
-        window.circleRenderer.Render(window.svg, data, window.popupDebug);
-      }));
-    } else {
-      window.showPopup();
-    }
-
-  };
+      container.append("div")
+        .style("float", "left")
+        .style("background-color", "white")
+        .call(d3.slider()
+          .axis(true)
+          .min(0)
+          .margin(100)
+          .max( function(d) {
+            return d.r * 2;
+          })
+          .step(5)
+          .value( function(d) {
+            return d.r;
+          })
+          .on("slide", function(evt, value, selection) {
+            window.data[selection.__data__.index].r = value;
+            window.circleRenderer.Render(window.svg, window.data, window.popupDebug);
+          }));
+  }
 
   return {
     Render: Render

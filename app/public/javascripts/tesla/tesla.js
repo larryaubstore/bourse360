@@ -11,20 +11,20 @@ define([ "../common/faceThumbnail",
       x: 290,
       y: 290,
       color: "green",
-      imagePath: "/images/jack.jpg",
+      imagePath: "images/jack.jpg",
       imageWidth: 253, 
       imageHeight: 349,
-      index: 1
+      showDebug: true 
     },
     { 
       r: 145,
-      x: 490,
+      x: 690,
       y: 290,
       color: "green",
-      imagePath: "/images/pauline.jpg",
+      imagePath: "images/pauline.jpg",
       imageWidth: 253, 
       imageHeight: 349,
-      index: 2
+      showDebug: false
     }
 
   ];
