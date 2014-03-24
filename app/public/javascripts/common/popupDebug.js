@@ -1,13 +1,17 @@
 define(["../common/d3.tip", "../common/d3.slider"], function (ignore, ignore) {
 
-  var Render = function (svg, data, circleRenderer) {
+  var Render = function (svg, data, circleRenderer, index) {
 
 
       window.circleRenderer = circleRenderer;
       window.svg = svg;
       window.data = data;
+      window.index = index;
 
-      var rects = d3.select("body").selectAll("div.debug").data(data);
+      var newArray = [];
+      newArray.push(data[index]);
+
+      var rects = d3.select("body").selectAll("div.debug").data(newArray);
       var container = rects.enter().append("div")
         .attr("class", "debug")
         .style("background-color", "gray")
@@ -47,9 +51,21 @@ define(["../common/d3.tip", "../common/d3.slider"], function (ignore, ignore) {
             return d.r;
           })
           .on("slide", function(evt, value, selection) {
-            window.data[selection.__data__.index].r = value;
+            //window.data[selection.__data__.index].r = value;
+            window.data[window.index].r = value;
             window.circleRenderer.Render(window.svg, window.data, window.popupDebug);
           }));
+
+
+      rects.style("top", function(d) {
+          return (d.y - 100) + "px";
+        })
+        .style("left", function(d) {
+          return d.x + "px";
+        });
+       
+
+      rects.exit().remove();
   }
 
   return {

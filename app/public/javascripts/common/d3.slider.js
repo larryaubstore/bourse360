@@ -63,20 +63,20 @@ d3.slider = function module() {
       //if range slider, create two
       var handle1, handle2 = null, divRange;
 
-      if ( value.length == 2 ) {
-        handle1 = div.append("a")
-          .classed("d3-slider-handle", true)
-          .attr("xlink:href", "#")
-          .attr('id', "handle-one")
-          .on("click", stopPropagation)
-          .call(drag);
-        handle2 = div.append("a")
-          .classed("d3-slider-handle", true)
-          .attr('id', "handle-two")
-          .attr("xlink:href", "#")
-          .on("click", stopPropagation)
-          .call(drag);
-      } else {
+//      if ( value.length == 2 ) {
+//        handle1 = div.append("a")
+//          .classed("d3-slider-handle", true)
+//          .attr("xlink:href", "#")
+//          .attr('id', "handle-one")
+//          .on("click", stopPropagation)
+//          .call(drag);
+//        handle2 = div.append("a")
+//          .classed("d3-slider-handle", true)
+//          .attr('id', "handle-two")
+//          .attr("xlink:href", "#")
+//          .on("click", stopPropagation)
+//          .call(drag);
+//      } else {
 
         
         handle1 = div.selectAll("a.d3-slider-handle").data([{index: indexSelection}]);
@@ -88,7 +88,7 @@ d3.slider = function module() {
           .attr('id', "handle-one")
           .on("click", stopPropagation)
           .call(drag);
-      }
+//      }
       
       // Horizontal slider
       if (orientation === "horizontal") {

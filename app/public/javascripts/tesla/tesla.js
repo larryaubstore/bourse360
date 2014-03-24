@@ -24,7 +24,7 @@ define([ "../common/faceThumbnail",
       imagePath: "images/pauline.jpg",
       imageWidth: 253, 
       imageHeight: 349,
-      showDebug: false
+      showDebug: true
     }
 
   ];

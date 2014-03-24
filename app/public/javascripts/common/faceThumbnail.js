@@ -30,8 +30,15 @@ define(function() {
         .attr("stroke", "green");
     })
 
-    .on("dblclick", function() {
-      popupDebug.Render(svg, data, faceThumbnailMod);
+    .on("dblclick", function(d, i) {
+  
+      for(var index = 0; index < data.length; index++) {
+        data[index].showDebug = false;
+      }
+
+      data[i].showDebug = true;
+      
+      popupDebug.Render(svg, data, faceThumbnailMod, i);
     });
 
 
