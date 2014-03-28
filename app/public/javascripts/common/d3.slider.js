@@ -222,7 +222,7 @@ d3.slider = function module() {
             value[ active - 1 ] = newValue;
             dispatch.slide(d3.event, value );
           } else {
-            dispatch.slide(d3.event.sourceEvent || d3.event, value = newValue, data);
+            dispatch.slide(d3.event.sourceEvent || d3.event, value = newValue, data.index);
           }
 
           if ( value[ 0 ] >= value[ 1 ] ) return;
@@ -280,7 +280,7 @@ d3.slider = function module() {
 
       function onClickHorizontal() {
         if (!value.length) {
-          moveHandle(d3.event.offsetX || d3.event.layerX);
+          moveHandle(d3.event.offsetX || d3.event.layerX, this.__data__.index);
         }
       }
 
@@ -297,7 +297,7 @@ d3.slider = function module() {
           active = 2;
         }
         //moveHandle(Math.max(0, Math.min(sliderLength, d3.event.x)), this.__data__);
-        moveHandle(Math.max(0, Math.min(sliderLength, d3.event.x)), this);
+        moveHandle(Math.max(0, Math.min(sliderLength, d3.event.x)), this.__data__);
       }
 
       function onDragVertical() {
