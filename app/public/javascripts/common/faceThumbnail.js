@@ -1,13 +1,19 @@
-define(function() {
+define(["../common/faceThumbnail/imageThumbnail", 
+        "../common/renderers" ], function(imageThumbnail, renderers) {
 
 
   var _svg; 
   var _data;
+  renderers.imageThumbnail = imageThumbnail;
+
+  var _renderers = renderers;
 
   var Render = function (svg, data) {
 
     _svg = svg;
     _data = data;
+
+    _renderers.imageThumbnail.Render(svg, data);
 
     var circle = svg.selectAll("circle")
       .data(_data);
@@ -36,7 +42,7 @@ define(function() {
     .on("dblclick", function(d, i) {
   
       d.showDebug = true;
-      window.renderers.popupDebug.Render(_svg, _data, i);
+      _renderers.faceThumbnailDebug.Render(_svg, _data, i);
     });
 
 
@@ -47,7 +53,6 @@ define(function() {
       .attr("fill", function(d) { return "none"; })
       .attr("stroke", function(d) { return d.color; })
       .attr("stroke-width", function(d) { return d.r / 3.5; });
-
 
   };
 

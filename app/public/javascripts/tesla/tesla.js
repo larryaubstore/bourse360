@@ -1,9 +1,10 @@
 define([ "../common/faceThumbnail", 
          "../common/svg", 
          "d3",
-         "../common/image",
-         "../common/popupDebug"
-          ], function( faceThumbnail, svgMod, ignore, imageMod, popupDebug) {
+//         "../common/image",
+         "../common/faceThumbnailDebug",
+         "../common/renderers"
+          ], function( faceThumbnail, svgMod, ignore, popupDebug, renderers) {
 
   var data = [
     { 
@@ -31,11 +32,7 @@ define([ "../common/faceThumbnail",
 
   var svg = svgMod.Render(990, 990); 
 
-  window.renderers = {};
-  window.renderers.faceThumbnail = faceThumbnail;
-  window.renderers.popupDebug    = popupDebug;
-  window.renderers.imageMod      = imageMod;
-
-  imageMod.Render(svg, data);
-  faceThumbnail.Render(svg, data);
+  renderers.faceThumbnail                    = faceThumbnail;
+  renderers.faceThumbnailDebug               = popupDebug;
+  renderers.faceThumbnail.Render(svg, data);
 });

@@ -1,8 +1,11 @@
-define(["../common/d3.tip", "../common/d3.slider"], function (ignore, ignore) {
+define(["../common/d3.tip", 
+        "../common/d3.slider",
+        "../common/renderers"], function (ignore, ignore, renderers) {
 
   var _svg;
   var _data;
   var _index;
+  var _renderers = renderers;
 
   var Render = function (svg, data, index) {
 
@@ -47,7 +50,7 @@ define(["../common/d3.tip", "../common/d3.slider"], function (ignore, ignore) {
         })
         .on("click", function(d, i) {
           _data[_index].showDebug = false;
-          window.renderers.popupDebug.Render(_svg, _data, _index);
+          _renderers.faceThumbnailDebug.Render(_svg, _data, _index);
         })
         .text("Hide");
 
@@ -101,7 +104,7 @@ define(["../common/d3.tip", "../common/d3.slider"], function (ignore, ignore) {
           })
           .on("slide", function(evt, value, index) {
             _data[_index].r = value;
-            window.renderers.faceThumbnail.Render(_svg, _data);
+            _renderers.faceThumbnail.Render(_svg, _data);
           }));
 
       rects.style("display", function(d) {
