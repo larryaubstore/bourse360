@@ -1,17 +1,64 @@
 define(["../common/d3.tip", "../common/d3.slider"], function (ignore, ignore) {
 
-  var Render = function (svg, data, circleRenderer, index) {
+  var _svg;
+  var _data;
+  var _index;
 
+  var Render = function (svg, data, index) {
 
-      window.circleRenderer = circleRenderer;
-      window.svg = svg;
-      window.data = data;
-      window.index = index;
+      _svg =    svg;
+      _data =   data;
+      _index = index;
 
       var newArray = [];
-      newArray.push(data[index]);
+      newArray.push(_data[index]);
+      newArray[0].uniqueIndex = (new Date).getTime();
 
-      var rects = d3.select("body").selectAll("div.debug").data(newArray);
+      var rects = d3.select("body").selectAll("div.debug")
+        .data(newArray, function(d) {
+          return d.uniqueIndex;
+      });
+      var showHideButtons = d3.select("body").selectAll("div.debug.showhidebutton")
+        .data(newArray, function(d) {
+          return d.uniqueIndex;
+      });
+
+
+      var button = showHideButtons.enter().append("div")
+        .attr("class", "debug showhidebutton")
+        .style("top", function(d) {
+          return (d.y - 100) + "px";
+        })
+        .style("left", function(d) {
+          return (d.x + 500) +  "px";
+        })
+        .style("background-color", "#3a87ad")
+        .style("-webkit-border-radius", "3px")
+        .style("-moz-border-radius", "3px")
+        .style("position", "absolute")
+        .style("padding", "10px")
+        .style("border-radius", "3px")
+        .style("display", function(d) {
+          if(d.showDebug) {
+            return "block";
+          } else {
+            return "none";
+          }
+        })
+        .on("click", function(d, i) {
+          _data[_index].showDebug = false;
+          window.renderers.popupDebug.Render(_svg, _data, _index);
+        })
+        .text("Hide");
+
+       showHideButtons.style("display", function(d) {
+          if(d.showDebug) {
+            return "block";
+          } else {
+            return "none";
+          }
+       });
+
       var container = rects.enter().append("div")
         .attr("class", "debug")
         .style("background-color", "gray")
@@ -30,6 +77,8 @@ define(["../common/d3.tip", "../common/d3.slider"], function (ignore, ignore) {
         .style("left", function(d) {
           return d.x + "px";
         });
+
+
 
       container.append("div")
         .style("float", "left")
@@ -50,22 +99,27 @@ define(["../common/d3.tip", "../common/d3.slider"], function (ignore, ignore) {
           .value( function(d) {
             return d.r;
           })
-          .on("slide", function(evt, value, selection) {
-            //window.data[selection.__data__.index].r = value;
-            window.data[window.index].r = value;
-            window.circleRenderer.Render(window.svg, window.data, window.popupDebug);
+          .on("slide", function(evt, value, index) {
+            _data[_index].r = value;
+            window.renderers.faceThumbnail.Render(_svg, _data);
           }));
 
-
-      rects.style("top", function(d) {
+      rects.style("display", function(d) {
+        if(d.showDebug) {
+          return "block";
+        } else {
+          return "none";
+        }
+      })
+      .style("top", function(d) {
           return (d.y - 100) + "px";
         })
         .style("left", function(d) {
           return d.x + "px";
         });
        
-
       rects.exit().remove();
+      showHideButtons.exit().remove();
   }
 
   return {

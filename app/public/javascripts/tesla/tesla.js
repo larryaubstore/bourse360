@@ -14,7 +14,7 @@ define([ "../common/faceThumbnail",
       imagePath: "images/jack.jpg",
       imageWidth: 253, 
       imageHeight: 349,
-      showDebug: true 
+      showDebug: false
     },
     { 
       r: 145,
@@ -24,19 +24,18 @@ define([ "../common/faceThumbnail",
       imagePath: "images/pauline.jpg",
       imageWidth: 253, 
       imageHeight: 349,
-      showDebug: true
+      showDebug: false
     }
 
   ];
 
   var svg = svgMod.Render(990, 990); 
 
-  window.svg = svg;
-  window.popupDebug = popupDebug;
+  window.renderers = {};
+  window.renderers.faceThumbnail = faceThumbnail;
+  window.renderers.popupDebug    = popupDebug;
+  window.renderers.imageMod      = imageMod;
 
   imageMod.Render(svg, data);
-  faceThumbnail.Render(svg, data, popupDebug);
-
-  //popup.Render(svg, data);
-
+  faceThumbnail.Render(svg, data);
 });

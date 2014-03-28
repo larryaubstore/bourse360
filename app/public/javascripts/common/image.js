@@ -1,13 +1,16 @@
 define(function( ) {
 
+  var _svg;
+  var _data;
 
   var Render = function (svg, data) {
 
-    var defs = svg.selectAll("defs").data(data); 
+    _svg = svg;
+    _data = data;
 
+    var defs = svg.selectAll("defs").data(data); 
     var def = defs.enter().append("defs");
 
-    // Clip
     def.append("rect")
       .attr("id", function(d, i) {
         return "rect" + i;

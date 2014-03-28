@@ -1,13 +1,16 @@
 define(function() {
 
 
+  var _svg; 
+  var _data;
 
-  var Render = function (svg, data, popupDebug) {
+  var Render = function (svg, data) {
 
-    console.log(data[0].r);
-    var faceThumbnailMod = this;
+    _svg = svg;
+    _data = data;
+
     var circle = svg.selectAll("circle")
-      .data(data);
+      .data(_data);
 
 
     circle.enter().append("circle")
@@ -32,13 +35,8 @@ define(function() {
 
     .on("dblclick", function(d, i) {
   
-      for(var index = 0; index < data.length; index++) {
-        data[index].showDebug = false;
-      }
-
-      data[i].showDebug = true;
-      
-      popupDebug.Render(svg, data, faceThumbnailMod, i);
+      d.showDebug = true;
+      window.renderers.popupDebug.Render(_svg, _data, i);
     });
 
 
