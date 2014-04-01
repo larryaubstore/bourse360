@@ -1,6 +1,6 @@
 define(["../common/d3.tip", 
         "../common/d3.slider",
-        "../common/renderers"], function (ignore, ignore, renderers) {
+        "../common/renderers" ], function (ignore, ignore, renderers) {
 
   var _svg;
   var _data;

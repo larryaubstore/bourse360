@@ -11,7 +11,6 @@ var path = require('path');
 var company = require('./routes/company/company');
 var tesla = require('./routes/tesla/tesla');
 
-var requirejs = require("requirejs");
 
 var app = express();
 var chart = require('./routes/userchart');
@@ -24,20 +23,16 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 
 
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-app.use(express.cookieParser('your secret here'));
-app.use(express.session());
 app.use(app.router);
 
 
-//app.use(require('stylus').middleware(__dirname + '/public'));
 app.use(express.static(path.join(__dirname + "/public")));
 
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
+
 
 //requirejs.config({
 //    shim: {

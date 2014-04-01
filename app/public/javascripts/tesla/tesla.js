@@ -1,11 +1,8 @@
-define([ "../common/faceThumbnail", 
-         "../common/svg", 
-         "d3",
-//         "../common/image",
-         "../common/faceThumbnailDebug",
-         "../common/renderers"
-          ], function( faceThumbnail, svgMod, ignore, popupDebug, renderers) {
+requirejs.config({paths: {d3: "http://d3js.org/d3.v3.min"}});
 
+requirejs(["d3"], function(d3) {
+
+  window.d3 = d3;
   var data = [
     { 
       r: 145,
@@ -27,12 +24,21 @@ define([ "../common/faceThumbnail",
       imageHeight: 349,
       showDebug: false
     }
-
   ];
 
-  var svg = svgMod.Render(990, 990); 
+  requirejs([ "../common/faceThumbnail", 
+         "../common/svg", 
+         "../common/faceThumbnailDebug",
+         "../common/renderers",
+          ], function( faceThumbnail, svgMod, popupDebug, renderers) {
 
-  renderers.faceThumbnail                    = faceThumbnail;
-  renderers.faceThumbnailDebug               = popupDebug;
-  renderers.faceThumbnail.Render(svg, data);
+ 
+
+    var svg = svgMod.Render(990, 990); 
+
+    renderers.faceThumbnail                    = faceThumbnail;
+    renderers.faceThumbnailDebug               = popupDebug;
+    renderers.faceThumbnail.Render(svg, data);
+
+  });
 });
