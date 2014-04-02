@@ -30,15 +30,19 @@ requirejs(["d3"], function(d3) {
          "../common/svg", 
          "../common/faceThumbnailDebug",
          "../common/renderers",
-          ], function( faceThumbnail, svgMod, popupDebug, renderers) {
+         "../common/adminPanel"
+          ], function( faceThumbnail, svgMod, popupDebug, renderers, adminPanel) {
 
  
 
-    var svg = svgMod.Render(990, 990); 
+    var svg = svgMod.Render(1200, 3000); 
 
     renderers.faceThumbnail                    = faceThumbnail;
     renderers.faceThumbnailDebug               = popupDebug;
+    renderers.adminPanel                       = adminPanel;
+
     renderers.faceThumbnail.Render(svg, data);
+    renderers.adminPanel.Render(svg, data);
 
   });
 });

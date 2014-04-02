@@ -5,8 +5,49 @@
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/company.css' /> 
     <link rel='stylesheet' href='/stylesheets/d3.slider.css' /> 
+
+    <script src='/jquery/jquery-2.1.0.min.js'></script>
+    <link rel='stylesheet' href='/bootstrap/css/bootstrap.min.css' />
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+
+    <style>
+      .affix-top {
+        position:absolute;left:500px;top:200px;
+      }
+
+      .affix-bottom {
+        position:absolute;left:500px;top:600px;
+      }
+
+      .affix {
+        position:fixed;left:500px;
+      }
+
+    </style>
+
+    <script type="text/javascript">
+
+//      setTimeout(function () {
+//        $('.admin').affix({
+//          offset: {
+//            top: 100,   
+//            bottom: 600 
+//          }
+//        });
+//      }, 2500);
+
+    </script>
   </head>
   <body>
+
+
+      <div data-spy="affix" data-offset-top="200" data-offset-bottom="600" style="background-color:yellow;width:100px;height:100px;"></div>
+
+
       <div id="faceThumbnailEffect"></div>
+
+        
+
+
   </body>
 </html>
