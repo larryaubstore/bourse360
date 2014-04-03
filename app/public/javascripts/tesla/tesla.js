@@ -1,4 +1,11 @@
-requirejs.config({paths: {d3: "http://d3js.org/d3.v3.min"}});
+requirejs.config(
+{ 
+  paths: {
+    d3: "http://d3js.org/d3.v3.min",
+    bootstrap: "/bootstrap/js/bootstrap.min"
+  }
+});
+
 
 requirejs(["d3"], function(d3) {
 

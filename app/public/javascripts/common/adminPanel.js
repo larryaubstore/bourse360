@@ -1,11 +1,23 @@
-define([ "../common/renderers" ], function(renderers) {
+define([ "../common/renderers", "bootstrap" ], function(renderers, bootstrap) {
 
 
   var _svg; 
   var _data;
   var _renderers = renderers;
 
+
+  var CreateClass = function (content) {
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    style.innerHTML = content;
+    document.getElementsByTagName('head')[0].appendChild(style);
+  }
+
   var Render = function (svg, data) {
+
+    CreateClass("div.admin.affix-top    { position:absolute !important; top: 100px !important; }");
+    //CreateClass("div.admin.affix-bottom { position:absolute !important; top: 600px !important;  }");
+    CreateClass("div.admin.affix        { position:fixed !important; }");
 
     var dragstarted = function(d) {
       d3.event.sourceEvent.stopPropagation();
@@ -14,7 +26,7 @@ define([ "../common/renderers" ], function(renderers) {
 
     var dragged = function(d) {
       d.x = d3.event.x;
-      d.y = d3.event.y;
+      //d.y = d3.event.y;
 
       d3.select(this)
         .style("left", d.x + "px")
@@ -35,16 +47,12 @@ define([ "../common/renderers" ], function(renderers) {
     _data = data;
 
 
-    // <div data-spy="affix" data-offset-top="60" data-offset-bottom="200">
-    var adminPanel = d3.select("body").selectAll("div.class").data([{"x": "100", "y": "100"}]);
+    var adminPanel = d3.select("body").selectAll("div.class").data([{"x": "200", "y": "0"}]);
 
     var outerdiv = adminPanel.enter().append("div")
       .attr("class", "admin")
 
       .attr("data-spy", "affix")
-      .attr("data-offset-top", "60")
-      .attr("data-offset-bottom", "200")
-
       .style("width", "300px")
       .style("height", "200px")
       .style("opacity", "0.75")
@@ -52,12 +60,16 @@ define([ "../common/renderers" ], function(renderers) {
       .style("position", "absolute")
       .style("border-radius", "5px")
       .style("top", function(d) {
-        return d.x + "px";
-      })
-      .style("left", function(d) {
         return d.y + "px";
       })
-      .call(drag);
+      .style("left", function(d) {
+        return d.x + "px";
+      })
+      .call(drag)
+      .call(function (selection) {
+        jQuery(selection).affix({ offset: 100 });
+      })
+
 
     outerdiv.append("div")
       .style("margin-left", "5px")
