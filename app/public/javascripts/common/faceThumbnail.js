@@ -8,6 +8,32 @@ define(["../common/faceThumbnail/imageThumbnail",
 
   var _renderers = renderers;
 
+
+  var tick = function(e) {
+
+    // Push different nodes in different directions for clustering.
+    var k = 4 * 6 * e.alpha;
+    _data.forEach(function(o, i) {
+//      o.y += i & 1 ? k : -k;
+//      o.x += i & 2 ? k : -k;
+   
+      _data[i].y += i & 1 ? k : -k;
+      _data[i].x += i & 2 ? k : -k;
+    });
+
+    var circle = _svg.selectAll("circle")
+      .data(_data);
+
+    circle
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+
+    _renderers.imageThumbnail.Render(_svg, _data);
+
+    //node.attr("cx", function(d) { return d.x; })
+    //  .attr("cy", function(d) { return d.y; });
+  };
+
   var Render = function (svg, data) {
 
     _svg = svg;
@@ -18,6 +44,12 @@ define(["../common/faceThumbnail/imageThumbnail",
     var circle = svg.selectAll("circle")
       .data(_data);
 
+    var force = d3.layout.force()
+      .nodes(_data)
+      .size([1200, 1000])
+      //.linkDistance(4000)
+      .on("tick", tick)
+      .start();
 
     circle.enter().append("circle")
       .attr("r", function(d) { return d.r; })
@@ -47,7 +79,8 @@ define(["../common/faceThumbnail/imageThumbnail",
   
       d.showDebug = true;
       _renderers.faceThumbnailDebug.Render(_svg, _data, i);
-    });
+    })
+    .call(force.drag);
 
 
     circle

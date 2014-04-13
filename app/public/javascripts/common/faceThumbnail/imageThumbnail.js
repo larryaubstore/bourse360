@@ -9,7 +9,11 @@ define(function( ) {
     _data = data;
 
     var defs = svg.selectAll("defs").data(data); 
+
+    //var rects = svg.selectAll("defs").selectAll("rect").data(data);
+
     var def = defs.enter().append("defs");
+
 
     def.append("rect")
       .attr("id", function(d, i) {
@@ -57,6 +61,26 @@ define(function( ) {
       .attr("clip-path", function(d, i) {
         return "url(#clip" + i + ")";
       });
+
+
+    images 
+      .attr("x", function(d, i) {
+        return d.x + (d.r / 3.5) / 2;
+      })
+      .attr("y", function(d, i) {
+        return d.y + (d.r / 3.5) / 2; 
+      });
+
+//    rects
+//      .attr("x", function(d, i) {
+//
+//        console.log("X => " + d.x + " -- i => " + i); 
+//        return d.x;
+//      })
+//      .attr("y", function(d, i) {
+//        return d.y;
+//      });
+ 
 
 
   };
