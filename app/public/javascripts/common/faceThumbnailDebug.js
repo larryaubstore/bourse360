@@ -17,6 +17,8 @@ define(["../common/d3.tip",
       newArray.push(_data[index]);
       newArray[0].uniqueIndex = (new Date).getTime();
 
+
+      /* DATA */
       var rects = d3.select("body").selectAll("div.debug")
         .data(newArray, function(d) {
           return d.uniqueIndex;
@@ -26,7 +28,10 @@ define(["../common/d3.tip",
           return d.uniqueIndex;
       });
 
+      rects.remove();
+      showHideButtons.remove();
 
+      /* ENTER */
       var button = showHideButtons.enter().append("div")
         .attr("class", "debug showhidebutton")
         .style("top", function(d) {
@@ -107,6 +112,7 @@ define(["../common/d3.tip",
             _renderers.faceThumbnail.Render(_svg, _data);
           }));
 
+      /* UPDATE */
       rects.style("display", function(d) {
         if(d.showDebug) {
           return "block";
@@ -120,7 +126,17 @@ define(["../common/d3.tip",
         .style("left", function(d) {
           return d.x + "px";
         });
-       
+
+      showHideButtons.style("display", function(d) {
+        if(d.showDebug) {
+          return "block";
+        } else {
+          return "none";
+        }
+      })
+     
+
+      /* REMOVE */       
       rects.exit().remove();
       showHideButtons.exit().remove();
   }
