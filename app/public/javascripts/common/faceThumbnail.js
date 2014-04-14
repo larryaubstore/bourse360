@@ -8,13 +8,24 @@ define(["../common/faceThumbnail/imageThumbnail",
 
   var _renderers = renderers;
 
+  var _foci;
 
   var tick = function(e) {
 
-    var k = 4 * 6 * e.alpha;
+    //var k = 4 * 6 * e.alpha;
+    var k = 0.1 * e.alpha;
     _data.forEach(function(o, i) {
-      _data[i].y += i & 1 ? k : -k;
-      _data[i].x += i & 2 ? k : -k;
+      //_data[i].y += i & 1 ? k : -k;
+      //_data[i].x += i & 2 ? k : -k;
+      //_data[i].y += (_foci[i].y - _data[i].y) * k;
+      //_data[i].x += (_foci[i].x - _data[i].x) * k;
+
+      o.y += (_foci[i].y - o.y) * k;
+      o.x += (_foci[i].x - o.x) * k;
+
+      _data[i].y = o.y;
+      _data[i].x = o.x;
+
     });
 
     var circle = _svg.selectAll("circle")
@@ -32,6 +43,8 @@ define(["../common/faceThumbnail/imageThumbnail",
     _svg = svg;
     _data = data;
 
+    _foci = [{x: 150, y: 150}, {x: 900, y: 150}, {x: 450, y: 150}];
+
     _renderers.imageThumbnail.Render(svg, data);
 
     var circle = svg.selectAll("circle")
@@ -40,6 +53,7 @@ define(["../common/faceThumbnail/imageThumbnail",
     var force = d3.layout.force()
       .nodes(_data)
       .size([1200, 1000])
+      //.linkDistance(630)
       .on("tick", tick)
       .start();
 
