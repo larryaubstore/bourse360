@@ -9,11 +9,8 @@ define(function( ) {
     _data = data;
 
     var defs = svg.selectAll("defs").data(data); 
-
-    //var rects = svg.selectAll("defs").selectAll("rect").data(data);
-
+    var defsRect = svg.selectAll("defs").data(data).select("rect");
     var def = defs.enter().append("defs");
-
 
     def.append("rect")
       .attr("id", function(d, i) {
@@ -65,21 +62,19 @@ define(function( ) {
 
     images 
       .attr("x", function(d, i) {
-        return d.x + (d.r / 3.5) / 2;
+        return d.x + ( (d.r / 3.5) / 2 ) - 150;
       })
       .attr("y", function(d, i) {
-        return d.y + (d.r / 3.5) / 2; 
+        return d.y + ( (d.r / 3.5) / 2 ) - 150; 
       });
 
-//    rects
-//      .attr("x", function(d, i) {
-//
-//        console.log("X => " + d.x + " -- i => " + i); 
-//        return d.x;
-//      })
-//      .attr("y", function(d, i) {
-//        return d.y;
-//      });
+    defsRect
+      .attr("x", function(d, i) {
+        return d.x - 150;
+      })
+      .attr("y", function(d, i) {
+        return d.y - 150;
+      });
  
 
 

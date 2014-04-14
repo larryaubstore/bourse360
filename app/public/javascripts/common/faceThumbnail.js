@@ -11,12 +11,8 @@ define(["../common/faceThumbnail/imageThumbnail",
 
   var tick = function(e) {
 
-    // Push different nodes in different directions for clustering.
     var k = 4 * 6 * e.alpha;
     _data.forEach(function(o, i) {
-//      o.y += i & 1 ? k : -k;
-//      o.x += i & 2 ? k : -k;
-   
       _data[i].y += i & 1 ? k : -k;
       _data[i].x += i & 2 ? k : -k;
     });
@@ -29,9 +25,6 @@ define(["../common/faceThumbnail/imageThumbnail",
       .attr("cy", function(d) { return d.y; });
 
     _renderers.imageThumbnail.Render(_svg, _data);
-
-    //node.attr("cx", function(d) { return d.x; })
-    //  .attr("cy", function(d) { return d.y; });
   };
 
   var Render = function (svg, data) {
@@ -47,7 +40,6 @@ define(["../common/faceThumbnail/imageThumbnail",
     var force = d3.layout.force()
       .nodes(_data)
       .size([1200, 1000])
-      //.linkDistance(4000)
       .on("tick", tick)
       .start();
 
