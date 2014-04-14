@@ -70,12 +70,18 @@ define(function( ) {
 
     defsRect
       .attr("x", function(d, i) {
-        return d.x - 150;
+        return d.x - (d.r);
       })
       .attr("y", function(d, i) {
-        return d.y - 150;
+        return d.y - (d.r);
+      })
+      .attr("width", function(d) {
+        return d.r * 2;
+      })
+      .attr("height", function(d) {
+        return d.r * 2;
       });
- 
+
 
 
   };
