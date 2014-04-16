@@ -19,7 +19,6 @@ requirejs(["d3"], function(d3) {
       imagePath: "images/jack.jpg",
       imageWidth: 253, 
       imageHeight: 349,
-      showDebug: false
     },
     { 
       r: 145,
@@ -29,7 +28,6 @@ requirejs(["d3"], function(d3) {
       imagePath: "images/pauline.jpg",
       imageWidth: 253, 
       imageHeight: 349,
-      showDebug: false
     }
   ];
 

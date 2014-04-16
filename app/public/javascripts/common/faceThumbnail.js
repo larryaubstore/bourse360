@@ -79,12 +79,15 @@ define(["../common/faceThumbnail/imageThumbnail",
 
     .on("dblclick", function(d, i) {
 
-      for(var index = 0; index < _data.length; index++) {
-        _data.showDebug = false;
-      }
-  
-      d.showDebug = true;
+//      for(var index = 0; index < _data.length; index++) {
+//        _data.showDebug = false;
+//      }
+//  
+//      d.showDebug = true;
+
+      
       _renderers.faceThumbnailDebug.Render(_svg, _data, i);
+      //_renderers.faceThumbnailDebug.Render(_svg, _data, i);
     })
     .call(force.drag);
 

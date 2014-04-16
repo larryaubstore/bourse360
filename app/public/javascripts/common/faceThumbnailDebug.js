@@ -13,32 +13,41 @@ define(["../common/d3.tip",
       _data =   data;
       _index = index;
 
-      var newArray = [];
-      newArray.push(_data[index]);
-      newArray[0].uniqueIndex = (new Date).getTime();
 
+      var newArray = [];
+      if(_data.length > 0) {
+        newArray.push({color: _data[index].color, 
+                       fixed: _data[index].fixed,
+                       imageHeight: _data[index].imageHeight,
+                       imagePath: _data[index].imagePath,
+                       imageWidth: _data[index].imageWidth,
+                       index: (new Date).getTime(),
+                       px: _data[index].px,
+                       py: _data[index].py,
+                       r: _data[index].r,
+                       weight: _data[index].weight,
+                       x: _data[index].x,
+                       y: _data[index].y });
+      }
 
       /* DATA */
       var rects = d3.select("body").selectAll("div.debug")
-        .data(newArray, function(d) {
-          return d.uniqueIndex;
-      });
-      var showHideButtons = d3.select("body").selectAll("div.debug.showhidebutton")
-        .data(newArray, function(d) {
-          return d.uniqueIndex;
-      });
+        .data(newArray, function(d) { return d.index; });
 
-      rects.remove();
-      showHideButtons.remove();
+      var showHideButtons = d3.select("body").selectAll("div.dbgshowhidebutton")
+        .data(newArray, function(d) { return d.index; });
+
+      //rects.remove();
+      //showHideButtons.remove();
 
       /* ENTER */
       var button = showHideButtons.enter().append("div")
-        .attr("class", "debug showhidebutton")
+        .attr("class", "dbgshowhidebutton")
         .style("top", function(d) {
           return (d.y - 100) + "px";
         })
         .style("left", function(d) {
-          return (d.x + 500) +  "px";
+          return "-150px";
         })
         .style("background-color", "#3a87ad")
         .style("-webkit-border-radius", "3px")
@@ -47,25 +56,19 @@ define(["../common/d3.tip",
         .style("padding", "10px")
         .style("border-radius", "3px")
         .style("display", function(d) {
-          if(d.showDebug) {
             return "block";
-          } else {
-            return "none";
-          }
         })
         .on("click", function(d, i) {
-          _data[_index].showDebug = false;
-          _renderers.faceThumbnailDebug.Render(_svg, _data, _index);
+          _renderers.faceThumbnailDebug.Render(_svg, [], _index);
         })
         .text("Hide");
 
-       showHideButtons.style("display", function(d) {
-          if(d.showDebug) {
-            return "block";
-          } else {
-            return "none";
-          }
-       });
+        button.transition()
+          .duration(750)
+          .style("left", function(d) {
+            return (d.x + 500) +  "px";
+          });
+
 
       var container = rects.enter().append("div")
         .attr("class", "debug")
@@ -73,19 +76,14 @@ define(["../common/d3.tip",
         .style("position", "absolute")
         .style("padding", "20px")
         .style("display", function(d) {
-          if(d.showDebug) {
-            return "block";
-          } else {
-            return "none";
-          }
+          return "block";
         })
         .style("top", function(d) {
           return (d.y - 100) + "px";
         })
         .style("left", function(d) {
-          return d.x + "px";
+          return "-450px";
         });
-
 
 
       container.append("div")
@@ -112,33 +110,53 @@ define(["../common/d3.tip",
             _renderers.faceThumbnail.Render(_svg, _data);
           }));
 
-      /* UPDATE */
-      rects.style("display", function(d) {
-        if(d.showDebug) {
-          return "block";
-        } else {
-          return "none";
-        }
-      })
-      .style("top", function(d) {
-          return (d.y - 100) + "px";
-        })
+      container.transition()
+        .duration(750)
         .style("left", function(d) {
           return d.x + "px";
         });
 
-      showHideButtons.style("display", function(d) {
-        if(d.showDebug) {
-          return "block";
-        } else {
-          return "none";
-        }
-      })
+
+      /* UPDATE */
+//      rects.style("display", function(d) {
+//        if(d.showDebug) {
+//          return "block";
+//        } else {
+//          return "none";
+//        }
+//      })
+//      .style("top", function(d) {
+//          return (d.y - 100) + "px";
+//        })
+//        .style("left", function(d) {
+//          return d.x + "px";
+//        });
+//
+//      showHideButtons.style("display", function(d) {
+//        if(d.showDebug) {
+//          return "block";
+//        } else {
+//          return "none";
+//        }
+//      })
      
 
       /* REMOVE */       
-      rects.exit().remove();
-      showHideButtons.exit().remove();
+      rects.exit()
+        .transition()
+          .duration(750)
+          .style("left", function(d) {
+            return "-450px";  
+          })
+        .remove();
+
+      showHideButtons.exit()
+        .transition()
+          .duration(750)
+          .style("left", function(d) {
+            return "-450px";  
+          })
+        .remove();
   }
 
   return {
