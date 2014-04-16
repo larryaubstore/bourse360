@@ -22,8 +22,8 @@ define([ "../common/renderers", "bootstrap" ], function(renderers, bootstrap) {
 
   var Render = function (svg, data) {
 
-    CreateClass("div.admin.affix-top    { position:absolute !important; top: 100px !important; }");
-    CreateClass("div.admin.affix-bottom { position:absolute !important; top: 1000px !important;  }");
+    CreateClass("div.admin.affix-top    { position:absolute !important; top: 10px !important; }");
+    //CreateClass("div.admin.affix-bottom { position:absolute !important; top: 1000px !important;  }");
     CreateClass("div.admin.affix        { position:fixed !important;  }");
 
     var dragstarted = function(d) {
@@ -54,7 +54,22 @@ define([ "../common/renderers", "bootstrap" ], function(renderers, bootstrap) {
     _data = data;
 
 
-    var adminPanel = d3.select("body").selectAll("div.class").data([{"x": "50", "y": "0", "text": "Export", "callback": "Export"}]);
+    var adminPanel = d3.select("body").selectAll("div.class").data([{"x": "-250", "y": "0", "text": "Export", "callback": "Export"}]);
+
+
+    var hideAdminPanel = function(scope) {
+      var posPixel = d3.select(scope).style("right");
+      if(posPixel.length > 2) {
+        posPixel = posPixel.substr(0, posPixel.length - 2);
+        if(parseInt(posPixel) <= 0) {
+          d3.select(scope).transition()
+            .style("right", function(d) {
+              return "-250px";
+            })
+            .duration(750);
+        }
+      }
+    };
 
     var outerdiv = adminPanel.enter().append("div")
       .attr("class", "admin")
@@ -63,7 +78,6 @@ define([ "../common/renderers", "bootstrap" ], function(renderers, bootstrap) {
       .style("width", "300px")
       .style("height", "200px")
       .style("opacity", "0.75")
-
       .style("background-color", "black")
       .style("position", "absolute")
       .style("border-radius", "5px")
@@ -73,6 +87,22 @@ define([ "../common/renderers", "bootstrap" ], function(renderers, bootstrap) {
       .style("right", function(d) {
         return d.x + "px";
       })
+      .on("mouseover", function () {
+
+        d3.select(this).transition()
+          .style("right", function(d) {
+            return "0px";
+          })
+          .ease("elastic")
+          .duration(750)
+          .each("end", function() {
+            //hideAdminPanel(this);
+          });
+          
+      })
+      .on("mouseout", function () {
+        hideAdminPanel(this);
+      })
       .call(drag)
       .call(function (selection) {
         jQuery(selection).affix({ offset: { top: 100, bottom: 1000 }});
@@ -80,7 +110,7 @@ define([ "../common/renderers", "bootstrap" ], function(renderers, bootstrap) {
 
 
     outerdiv.append("div")
-      .style("margin-left", "5px")
+      .style("margin-right", "5px")
       .style("margin-top", "5px")
       .style("background-color", "#58FA82")
 
@@ -89,6 +119,7 @@ define([ "../common/renderers", "bootstrap" ], function(renderers, bootstrap) {
 
       .style("text-align", "center")
       .style("font-weight", "bold")
+      .style("float", "right")
       .on("mousedown", function() {
         d3.select(this)
           .style("border-color", "red")
