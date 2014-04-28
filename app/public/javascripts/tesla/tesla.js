@@ -10,8 +10,22 @@ requirejs.config(
 requirejs(["d3"], function(d3) {
 
   window.d3 = d3;
+
+  //var links = {"source":2,"target":0,"value":8},{"source":3,"target":0,"value":10}
+
   var data = [
     { 
+      level: 1,
+      r: 45,
+      x: 290,
+      y: 290,
+      color: "green",
+      imagePath: "images/jack.jpg",
+      imageWidth: 253, 
+      imageHeight: 349,
+    },
+    { 
+      level: 2,
       r: 145,
       x: 290,
       y: 290,
@@ -21,6 +35,38 @@ requirejs(["d3"], function(d3) {
       imageHeight: 349,
     },
     { 
+      level: 2,
+      r: 145,
+      x: 690,
+      y: 290,
+      color: "green",
+      imagePath: "images/pauline.jpg",
+      imageWidth: 253, 
+      imageHeight: 349,
+    },
+
+    { 
+      level: 3,
+      r: 145,
+      x: 690,
+      y: 290,
+      color: "green",
+      imagePath: "images/pauline.jpg",
+      imageWidth: 253, 
+      imageHeight: 349,
+    },
+    { 
+      level: 3,
+      r: 145,
+      x: 690,
+      y: 290,
+      color: "green",
+      imagePath: "images/pauline.jpg",
+      imageWidth: 253, 
+      imageHeight: 349,
+    },
+    { 
+      level: 3,
       r: 145,
       x: 690,
       y: 290,
@@ -29,6 +75,7 @@ requirejs(["d3"], function(d3) {
       imageWidth: 253, 
       imageHeight: 349,
     }
+
   ];
 
   requirejs([ "../common/faceThumbnail", 
@@ -40,7 +87,12 @@ requirejs(["d3"], function(d3) {
 
  
 
-    var svg = svgMod.Render(1200, 3000); 
+    window.width  = 1200;
+    window.height = 3000;
+
+    window.levelCount = 3;
+
+    var svg = svgMod.Render(window.width, window.height); 
 
     renderers.faceThumbnail                    = faceThumbnail;
     renderers.faceThumbnailDebug               = popupDebug;

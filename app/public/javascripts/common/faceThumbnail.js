@@ -12,16 +12,102 @@ define(["../common/faceThumbnail/imageThumbnail",
 
   var tick = function(e) {
 
-    //var k = 4 * 6 * e.alpha;
     var k = 0.1 * e.alpha;
-    _data.forEach(function(o, i) {
-      //_data[i].y += i & 1 ? k : -k;
-      //_data[i].x += i & 2 ? k : -k;
-      //_data[i].y += (_foci[i].y - _data[i].y) * k;
-      //_data[i].x += (_foci[i].x - _data[i].x) * k;
 
-      o.y += (_foci[i].y - o.y) * k;
-      o.x += (_foci[i].x - o.x) * k;
+    var levelState = [];
+
+    // Calculates count for each level.
+    // For instance,
+    // {
+    //  ...,
+    //  level:1
+    // },
+    // {
+    //  ...,
+    //  level:2
+    // },
+    // {
+    //  ...,
+    //  level:2
+    // },
+    // {
+    //  ...,
+    //  level:2
+    // },
+    // {
+    //  ...,
+    //  level:3
+    // }
+    // levelCount["1"] = 1;
+    // levelCount["2"] = 2;
+    // levelCount["3"] = 1;
+//    _data.forEach(function(o, i) {
+//      if( typeof(levelCount[o.level.toString()]) !== "undefined") {
+//        levelCount[o.level.toString()] = 1;
+//      } else {
+//        levelCount[o.level.toString()] = levelCount[o.level.toString()] + 1;  
+//      }
+//    });
+    
+
+
+    var coefficient;
+    _data.forEach(function(o, i) {
+   
+      //o.x +=  (_foci[o.level].x - (o.x + i*440)) * k;
+      //o.x +=  (_foci[o.level].x * i - (o.x)) * k;
+
+      o.y +=  (_foci[o.level-1].y * 1 - o.y) * k;
+
+//      if(o.level != 0) {
+//        if(i == 1) {
+//          o.x +=  (_foci[o.level].x * 1.6 - (o.x)) * k;
+//        }
+//        else {
+//          o.x +=  (_foci[o.level].x * 0.4  - (o.x)) * k;
+//        }
+//      } else {
+//        o.x +=  (_foci[o.level].x * 1 - (o.x)) * k;
+//      }
+
+
+      if( typeof(levelState[o.level.toString()]) === "undefined" ) {
+        levelState[o.level.toString()] = 0.5;
+
+      } else {
+
+        switch(levelState[o.level.toString()]) {
+
+          case 0.5:
+            levelState[o.level.toString()] = 1.5;
+            break;
+          case 1.5:
+            levelState[o.level.toString()] = -0.5;
+            break;
+          case 0:
+            levelState[o.level.toString()] = 2;
+            break;
+          case 2:
+            levelState[o.level.toString()] = -0.5;
+            break;
+          case -0.5:
+            levelState[o.level.toString()] = 2.5;
+            break;
+          case 2.5:
+            levelState[o.level.toString()] = -1;
+            break;
+
+        }
+     }
+
+
+      //if(o.level != 1) {
+        o.x +=  (_foci[o.level-1].x * levelState[o.level.toString()]  - (o.x)) * k;
+      //} else {
+      //  o.x +=  (_foci[o.level-1].x * 1 - (o.x)) * k;
+      //}
+
+
 
       _data[i].y = o.y;
       _data[i].x = o.x;
@@ -32,7 +118,8 @@ define(["../common/faceThumbnail/imageThumbnail",
       .data(_data);
 
     circle
-      .attr("cx", function(d) { return d.x; })
+//      .attr("cx", function(d) { return (d.x * 8) - window.width / (2 / 6); })
+      .attr("cx", function(d) { return d.x ; })
       .attr("cy", function(d) { return d.y; });
 
     _renderers.imageThumbnail.Render(_svg, _data);
@@ -43,7 +130,36 @@ define(["../common/faceThumbnail/imageThumbnail",
     _svg = svg;
     _data = data;
 
-    _foci = [{x: 150, y: 150}, {x: 900, y: 150}, {x: 450, y: 150}];
+    _foci = [];
+
+    var fociXpos;
+    var fociYpos;
+
+    for(var i = 0; i < window.levelCount; i++) {
+      fociXpos = window.width / 2;
+//      fociYpos = -(window.height / (i+1)) + 450;
+      //fociYpos = -(window.height / (i+1)) * 1.5 + 850;
+      //fociYpos = -(window.height / (i+1)) + 2500;
+
+      switch(i) {
+
+        case 0:
+          fociYpos = 100;
+          break;
+        case 1:
+          fociYpos = 700;
+          break;
+        case 2:
+          fociYpos = 1300;
+          break;
+      }
+      
+      console.log("X => " + fociXpos);
+      console.log("Y => " + fociYpos);
+      _foci.push({ x: fociXpos, y: fociYpos});
+    }
+
+    //_foci = [ {x: 600, y: 50},  {x: 0, y: 550},{x: 1400, y: 550}   ];
 
     _renderers.imageThumbnail.Render(svg, data);
 
@@ -52,8 +168,7 @@ define(["../common/faceThumbnail/imageThumbnail",
 
     var force = d3.layout.force()
       .nodes(_data)
-      .size([1200, 1000])
-      //.linkDistance(630)
+      .size([window.width, window.height])
       .on("tick", tick)
       .start();
 
@@ -78,16 +193,7 @@ define(["../common/faceThumbnail/imageThumbnail",
     })
 
     .on("dblclick", function(d, i) {
-
-//      for(var index = 0; index < _data.length; index++) {
-//        _data.showDebug = false;
-//      }
-//  
-//      d.showDebug = true;
-
-      
       _renderers.faceThumbnailDebug.Render(_svg, _data, i);
-      //_renderers.faceThumbnailDebug.Render(_svg, _data, i);
     })
     .call(force.drag);
 
