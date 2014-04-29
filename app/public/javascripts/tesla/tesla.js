@@ -26,7 +26,7 @@ requirejs(["d3"], function(d3) {
     },
     { 
       level: 2,
-      r: 145,
+      r: 110,
       x: 290,
       y: 290,
       color: "green",
@@ -36,7 +36,7 @@ requirejs(["d3"], function(d3) {
     },
     { 
       level: 2,
-      r: 145,
+      r: 110,
       x: 690,
       y: 290,
       color: "green",
@@ -47,7 +47,7 @@ requirejs(["d3"], function(d3) {
 
     { 
       level: 3,
-      r: 145,
+      r: 110,
       x: 690,
       y: 290,
       color: "green",
@@ -57,7 +57,7 @@ requirejs(["d3"], function(d3) {
     },
     { 
       level: 3,
-      r: 145,
+      r: 110,
       x: 690,
       y: 290,
       color: "green",
@@ -67,7 +67,7 @@ requirejs(["d3"], function(d3) {
     },
     { 
       level: 3,
-      r: 145,
+      r: 110,
       x: 690,
       y: 290,
       color: "green",

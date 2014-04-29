@@ -11,106 +11,47 @@ define(["../common/faceThumbnail/imageThumbnail",
   var _foci;
 
   var tick = function(e) {
-
+//    var k = 0.1 * e.alpha;
     var k = 0.1 * e.alpha;
-
     var levelState = [];
-
-    // Calculates count for each level.
-    // For instance,
-    // {
-    //  ...,
-    //  level:1
-    // },
-    // {
-    //  ...,
-    //  level:2
-    // },
-    // {
-    //  ...,
-    //  level:2
-    // },
-    // {
-    //  ...,
-    //  level:2
-    // },
-    // {
-    //  ...,
-    //  level:3
-    // }
-    // levelCount["1"] = 1;
-    // levelCount["2"] = 2;
-    // levelCount["3"] = 1;
-//    _data.forEach(function(o, i) {
-//      if( typeof(levelCount[o.level.toString()]) !== "undefined") {
-//        levelCount[o.level.toString()] = 1;
-//      } else {
-//        levelCount[o.level.toString()] = levelCount[o.level.toString()] + 1;  
-//      }
-//    });
-    
 
 
     var coefficient;
     _data.forEach(function(o, i) {
    
-      //o.x +=  (_foci[o.level].x - (o.x + i*440)) * k;
-      //o.x +=  (_foci[o.level].x * i - (o.x)) * k;
-
       o.y +=  (_foci[o.level-1].y * 1 - o.y) * k;
-
-//      if(o.level != 0) {
-//        if(i == 1) {
-//          o.x +=  (_foci[o.level].x * 1.6 - (o.x)) * k;
-//        }
-//        else {
-//          o.x +=  (_foci[o.level].x * 0.4  - (o.x)) * k;
-//        }
-//      } else {
-//        o.x +=  (_foci[o.level].x * 1 - (o.x)) * k;
-//      }
-
-
       if( typeof(levelState[o.level.toString()]) === "undefined" ) {
-        levelState[o.level.toString()] = 0.5;
-
+        levelState[o.level.toString()] = 1;
       } else {
-
         switch(levelState[o.level.toString()]) {
-
-          case 0.5:
-            levelState[o.level.toString()] = 1.5;
-            break;
-          case 1.5:
-            levelState[o.level.toString()] = -0.5;
+          case 1:
+            levelState[o.level.toString()] = 0;
             break;
           case 0:
             levelState[o.level.toString()] = 2;
             break;
           case 2:
-            levelState[o.level.toString()] = -0.5;
-            break;
-          case -0.5:
-            levelState[o.level.toString()] = 2.5;
-            break;
-          case 2.5:
             levelState[o.level.toString()] = -1;
             break;
-
+          case -1:
+            levelState[o.level.toString()] = 3;
+            break;
+          case 3:
+            levelState[o.level.toString()] = -2;
+            break;
+          case -2:
+            levelState[o.level.toString()] = 4;
+            break;
+          case 4:
+            levelState[o.level.toString()] = -3;
+            break;
         }
      }
 
+     o.x +=  (_foci[o.level-1].x * levelState[o.level.toString()]  - (o.x)) * k;
 
-      //if(o.level != 1) {
-        o.x +=  (_foci[o.level-1].x * levelState[o.level.toString()]  - (o.x)) * k;
-      //} else {
-      //  o.x +=  (_foci[o.level-1].x * 1 - (o.x)) * k;
-      //}
-
-
-
-      _data[i].y = o.y;
-      _data[i].x = o.x;
+     _data[i].y = o.y;
+     _data[i].x = o.x;
 
     });
 
@@ -144,18 +85,17 @@ define(["../common/faceThumbnail/imageThumbnail",
       switch(i) {
 
         case 0:
-          fociYpos = 100;
+          //fociYpos = 100;
+          fociYpos = 100 - 1300;
           break;
         case 1:
-          fociYpos = 700;
+          fociYpos = 700 - 1300;
           break;
         case 2:
-          fociYpos = 1300;
+          fociYpos = 1300 - 1300;
           break;
       }
       
-      console.log("X => " + fociXpos);
-      console.log("Y => " + fociYpos);
       _foci.push({ x: fociXpos, y: fociYpos});
     }
 
@@ -195,13 +135,15 @@ define(["../common/faceThumbnail/imageThumbnail",
     .on("dblclick", function(d, i) {
       _renderers.faceThumbnailDebug.Render(_svg, _data, i);
     })
-    .call(force.drag);
+//    .call(force.drag);
 
 
     circle
       .attr("r", function(d) { return d.r; })
-      .attr("cx", function(d) { return d.x + d.r; })
-      .attr("cy", function(d) { return d.y + d.r; })
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+//      .attr("cx", function(d) { return d.x + d.r; })
+//      .attr("cy", function(d) { return d.y + d.r; })
       .attr("fill", function(d) { return "none"; })
       .attr("stroke", function(d) { return d.color; })
       .attr("stroke-width", function(d) { return d.r / 3.5; });

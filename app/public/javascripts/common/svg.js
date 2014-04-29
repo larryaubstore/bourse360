@@ -1,11 +1,21 @@
 define(function() {
 
   var Render = function (width, height) {
-    var svg = d3.select("body").append("svg");
+    var container = d3.select("body");
+
+
+    var svg = container
+      .append("div")
+      .style("width", "100%")
+      .style("background-color", "#00FFBF")
+      .append("svg");
 
     svg
       .attr("width", width)
-      .attr("height", height);
+      .attr("height", height)
+      .style("background-color", "white")
+      .style("display", "block")
+      .style("margin", "0 auto");
     return svg;
   };
 
