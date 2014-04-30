@@ -78,6 +78,16 @@ requirejs(["d3"], function(d3) {
 
   ];
 
+  var links = [ 
+    {"source":0,"target":1,"value":5},
+    {"source":0,"target":2,"value":5},
+    {"source":1,"target":3,"value":5},
+    {"source":1,"target":4,"value":5},
+    {"source":1,"target":5,"value":5},
+  ];
+  window.links = links;
+
+
   requirejs([ "../common/faceThumbnail", 
          "../common/svg", 
          "../common/faceThumbnailDebug",
@@ -91,6 +101,7 @@ requirejs(["d3"], function(d3) {
     window.height = 3000;
 
     window.levelCount = 3;
+
 
     var svg = svgMod.Render(window.width, window.height); 
 

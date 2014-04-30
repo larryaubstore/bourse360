@@ -53,15 +53,22 @@ define(["../common/faceThumbnail/imageThumbnail",
      _data[i].y = o.y;
      _data[i].x = o.x;
 
+
     });
+
+    var link = _svg.selectAll(".link");
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; }); 
 
     var circle = _svg.selectAll("circle")
       .data(_data);
 
     circle
-//      .attr("cx", function(d) { return (d.x * 8) - window.width / (2 / 6); })
       .attr("cx", function(d) { return d.x ; })
       .attr("cy", function(d) { return d.y; });
+
 
     _renderers.imageThumbnail.Render(_svg, _data);
   };
@@ -100,6 +107,13 @@ define(["../common/faceThumbnail/imageThumbnail",
     }
 
     //_foci = [ {x: 600, y: 50},  {x: 0, y: 550},{x: 1400, y: 550}   ];
+    var link = svg.selectAll(".link")
+      .data(window.links)
+      .enter().append("line")
+      .attr("class", "link")
+      .style("stroke", "#999")
+      .style("stroke-opacity", ".6")
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
 
     _renderers.imageThumbnail.Render(svg, data);
 
@@ -108,9 +122,16 @@ define(["../common/faceThumbnail/imageThumbnail",
 
     var force = d3.layout.force()
       .nodes(_data)
+      .links(window.links)
+//      .linkDistance(460)
+      .linkDistance(1360)
+      .linkStrength(0)
+      .alpha(0.005)
       .size([window.width, window.height])
       .on("tick", tick)
       .start();
+
+ 
 
     circle.enter().append("circle")
       .attr("r", function(d) { return d.r; })
@@ -135,7 +156,7 @@ define(["../common/faceThumbnail/imageThumbnail",
     .on("dblclick", function(d, i) {
       _renderers.faceThumbnailDebug.Render(_svg, _data, i);
     })
-//    .call(force.drag);
+    .call(force.drag);
 
 
     circle
@@ -147,6 +168,7 @@ define(["../common/faceThumbnail/imageThumbnail",
       .attr("fill", function(d) { return "none"; })
       .attr("stroke", function(d) { return d.color; })
       .attr("stroke-width", function(d) { return d.r / 3.5; });
+
 
   };
 
