@@ -2,15 +2,35 @@ requirejs.config(
 { 
   paths: {
     d3: "http://d3js.org/d3.v3.min",
-    bootstrap: "/bootstrap/js/bootstrap.min"
+    bootstrap: "/bootstrap/js/bootstrap.min",
+    jsoneditor: "/javascripts/jsoneditor/jsoneditor-min"
   }
 });
 
 
-requirejs(["d3"], function(d3) {
+requirejs(["d3", "jsoneditor"], function(d3, jsoneditor) {
 
   window.d3 = d3;
+  var container = document.getElementById('jsoneditor');
+  var editor = new jsoneditor.JSONEditor(container);
 
+  editor.setMode("text");
+  //document.getElementById('setJSON').onclick = function () {
+//    var json = {
+//      'array': [1, 2, 3],
+//      'boolean': true,
+//      'null': null,
+//      'number': 123,
+//      'object': {'a': 'b', 'c': 'd'},
+//      'string': 'Hello World'
+//    };
+//    editor.set(json);
+  //};
+//
+//  document.getElementById('getJSON').onclick = function () {
+//    var json = editor.get();
+//    alert(JSON.stringify(json, null, 2));
+//  }; 
   //var links = {"source":2,"target":0,"value":8},{"source":3,"target":0,"value":10}
 
   var data = [
@@ -87,6 +107,7 @@ requirejs(["d3"], function(d3) {
   ];
   window.links = links;
 
+  editor.set(data);
 
   requirejs([ "../common/faceThumbnail", 
          "../common/svg", 

@@ -8,48 +8,27 @@
 
     <script src='/jquery/jquery-2.1.0.min.js'></script>
     <link rel='stylesheet' href='/bootstrap/css/bootstrap.min.css' />
-  <!--  <script src="/bootstrap/js/bootstrap.min.js"></script> -->
-<!--
+
+    <link rel='stylesheet' href='/javascripts/jsoneditor/jsoneditor-min.css' />  
+
     <style>
-      .affix-top {
-        position:absolute;left:500px;top:200px;
+      #jsoneditor {
+        width: 500px;
+        height: 500px;
+        position: absolute;
+        left:50px;
+        top: 50px;
       }
-
-      .affix-bottom {
-        position:absolute;left:500px;top:600px;
-      }
-
-      .affix {
-        position:fixed;left:500px;
-      }
-
     </style>
 
--->
-
-    <script type="text/javascript">
-
-//      setTimeout(function () {
-//        $('.admin').affix({
-//          offset: {
-//            top: 100,   
-//            bottom: 600 
-//          }
-//        });
-//      }, 2500);
-
-    </script>
-  </head>
+  <!--   <script type="text/javascript" src="/javascripts/jsoneditor/jsoneditor-min.js"></script> -->
+ </head>
   <body>
-
-
-      <!-- <div data-spy="affix" data-offset-top="200" data-offset-bottom="600" style="background-color:yellow;width:100px;height:100px;"></div> -->
-
-
       <div id="faceThumbnailEffect"></div>
-
-        
-
-
+<p>
+  <button id="setJSON">Set JSON</button>
+  <button id="getJSON">Get JSON</button>
+</p>
+      <div id="jsoneditor"></div>
   </body>
 </html>

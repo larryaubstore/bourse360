@@ -11,7 +11,6 @@ define(["../common/faceThumbnail/imageThumbnail",
   var _foci;
 
   var tick = function(e) {
-//    var k = 0.1 * e.alpha;
     var k = 0.1 * e.alpha;
     var levelState = [];
 
