@@ -23,7 +23,6 @@ define([ "../common/renderers", "bootstrap" ], function(renderers, bootstrap) {
   var Render = function (svg, data) {
 
     CreateClass("div.admin.affix-top    { position:absolute !important; top: 10px !important; }");
-    //CreateClass("div.admin.affix-bottom { position:absolute !important; top: 1000px !important;  }");
     CreateClass("div.admin.affix        { position:fixed !important;  }");
 
     var dragstarted = function(d) {
@@ -32,12 +31,7 @@ define([ "../common/renderers", "bootstrap" ], function(renderers, bootstrap) {
     }
 
     var dragged = function(d) {
-      //d.x = d3.event.x;
-      //d.y = d3.event.y;
 
-//      d3.select(this)
-//        .style("left", d.x + "px")
-//        .style("top", d.y + "px");
     }
 
     var dragended = function(d) {
@@ -105,7 +99,8 @@ define([ "../common/renderers", "bootstrap" ], function(renderers, bootstrap) {
       })
       .call(drag)
       .call(function (selection) {
-        jQuery(selection).affix({ offset: { top: 100, bottom: 1000 }});
+        //jQuery(selection).affix({ offset: { top: 100, bottom: 1000 }});
+        jQuery(selection).affix({ offset: { top: 100 }});
       })
 
 

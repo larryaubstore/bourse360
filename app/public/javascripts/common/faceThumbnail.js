@@ -1,10 +1,12 @@
 define(["../common/faceThumbnail/imageThumbnail", 
-        "../common/renderers" ], function(imageThumbnail, renderers) {
+        "../common/renderers",
+        "../common/jsonEditorDrag" ], function(imageThumbnail, renderers, jsonEditorDrag) {
 
 
   var _svg; 
   var _data;
   renderers.imageThumbnail = imageThumbnail;
+  renderers.jsonEditorDrag = jsonEditorDrag;
 
   var _renderers = renderers;
 
@@ -84,14 +86,9 @@ define(["../common/faceThumbnail/imageThumbnail",
 
     for(var i = 0; i < window.levelCount; i++) {
       fociXpos = window.width / 2;
-//      fociYpos = -(window.height / (i+1)) + 450;
-      //fociYpos = -(window.height / (i+1)) * 1.5 + 850;
-      //fociYpos = -(window.height / (i+1)) + 2500;
-
       switch(i) {
 
         case 0:
-          //fociYpos = 100;
           fociYpos = 100 - 1300;
           break;
         case 1:
@@ -105,7 +102,6 @@ define(["../common/faceThumbnail/imageThumbnail",
       _foci.push({ x: fociXpos, y: fociYpos});
     }
 
-    //_foci = [ {x: 600, y: 50},  {x: 0, y: 550},{x: 1400, y: 550}   ];
     var link = svg.selectAll(".link")
       .data(window.links)
       .enter().append("line")
@@ -115,6 +111,7 @@ define(["../common/faceThumbnail/imageThumbnail",
       .style("stroke-width", function(d) { return Math.sqrt(d.value); });
 
     _renderers.imageThumbnail.Render(svg, data);
+    _renderers.jsonEditorDrag.Render(svg, data);
 
     var circle = svg.selectAll("circle")
       .data(_data);
@@ -122,8 +119,6 @@ define(["../common/faceThumbnail/imageThumbnail",
     var force = d3.layout.force()
       .nodes(_data)
       .links(window.links)
-//      .linkDistance(460)
-      .linkDistance(1360)
       .linkStrength(0)
       .alpha(0.005)
       .size([window.width, window.height])
@@ -162,8 +157,6 @@ define(["../common/faceThumbnail/imageThumbnail",
       .attr("r", function(d) { return d.r; })
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
-//      .attr("cx", function(d) { return d.x + d.r; })
-//      .attr("cy", function(d) { return d.y + d.r; })
       .attr("fill", function(d) { return "none"; })
       .attr("stroke", function(d) { return d.color; })
       .attr("stroke-width", function(d) { return d.r / 3.5; });
