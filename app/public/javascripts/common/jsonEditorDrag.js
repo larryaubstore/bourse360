@@ -1,4 +1,4 @@
-define([ "../common/renderers" ], function(renderers) {
+define([ "../common/renderers", "jsoneditor" ], function(renderers, jsoneditor) {
 
   var _svg;
   var _data;
@@ -6,22 +6,16 @@ define([ "../common/renderers" ], function(renderers) {
 
   var _onMouseOver = false;
 
-  var CreateClass = function (content) {
-    var style = document.createElement('style');
-    style.type = 'text/css';
-    style.innerHTML = content;
-    document.getElementsByTagName('head')[0].appendChild(style);
-  }
-
   var Render = function (svg, data) {
     _svg = svg;
     _data = data;
 
-    CreateClass("#jsoneditor.affix-top    { position:absolute !important; top: 600px !important;  }");
-    CreateClass("#jsoneditor.affix        { position:fixed !important; }");
+    var container = document.getElementById('jsoneditor');
+    var editor = new jsoneditor.JSONEditor(container);
+    editor.setMode("text");
+    editor.set(_data);
 
-    var jsonEditor = d3.select("#jsoneditor").data([{x: -450, y:250}]);
-
+    var jsonEditorD3 = d3.select("#jsoneditor").data([{x: -450, y:250}]);
     var hideJsonEditor = function(scope) {
       var posPixel = d3.select(scope).style("right");
       if(posPixel.length > 2) {
@@ -57,7 +51,7 @@ define([ "../common/renderers" ], function(renderers) {
 
       });
 
-    jsonEditor
+    jsonEditorD3
       .style("right", function(d) {
         return d.x + "px";
       })
