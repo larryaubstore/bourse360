@@ -3,7 +3,7 @@ requirejs.config(
   paths: {
     d3: "http://d3js.org/d3.v3.min",
     bootstrap: "/bootstrap/js/bootstrap.min",
-    jsoneditor: "/javascripts/jsoneditor/jsoneditor-min"
+    jsoneditor: "/javascripts/jsoneditor/jsoneditor"
   }
 });
 
