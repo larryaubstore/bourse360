@@ -22,9 +22,9 @@ requirejs(["d3" ], function(d3) {
       x: window.width / 2,
       y: -300,
       color: "green",
-      imagePath: "images/jack.jpg",
-      imageWidth: 253, 
-      imageHeight: 349,
+      imagePath: "images/logo_pq.gif",
+      imageWidth: 100, 
+      imageHeight: 100,
     },
     { 
       level: 2,

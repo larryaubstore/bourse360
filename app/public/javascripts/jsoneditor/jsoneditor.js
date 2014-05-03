@@ -1100,6 +1100,16 @@ TextEditor.prototype._create = function (container, options, json) {
     }
   };
 
+  // create custom button
+  var buttonCompact = document.createElement('button');
+  buttonCompact.className = 'compact';
+  buttonCompact.title = 'Custom button';
+  this.menu.appendChild(buttonCompact);
+  buttonCompact.onclick = function () {
+
+    //window.renderers.
+  };
+
   // create mode box
   if (this.options && this.options.modes && this.options.modes.length) {
     var modeBox = createModeBox(this, this.options.modes, this.options.mode);
