@@ -12,7 +12,7 @@ requirejs(["d3" ], function(d3) {
 
   window.d3 = d3;
 
-  window.width  = 1200;
+  window.width  = 1100;
   window.height = 3000;
 
   var data = [

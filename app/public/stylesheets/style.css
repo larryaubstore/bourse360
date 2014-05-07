@@ -4,7 +4,8 @@ html {
   background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ececec)) fixed;
 }
 body {
-  padding: 120px 150px;
+  /*padding: 120px 150px;*/
+  margin: 0px;
   font: 14px/1.4 'helvetica neue', helvetica, arial, sans-serif;
   color: #434343;
 }

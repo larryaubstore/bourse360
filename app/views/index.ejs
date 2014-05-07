@@ -2,20 +2,64 @@
 <html>
   <head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+<!--     <link rel='stylesheet' href='/stylesheets/style.css' />-->
+
+    <style>
+
+      body {
+        background-color:#EFFBFB;
+        margin:0;
+      }
+
+      .testdiv {
+/*        background-image: url(/images/flag3.png);
+        background-repeat:repeat;*/
+        height:300px;
+      }
+
+      .bottomdiv {
+        position:absolute;
+        bottom: 0px;
+        height: 25px;
+        background-color:#2E9AFE;
+        width: 100%;
+        -moz-box-shadow:    1px -1px 1px 1px #333;
+        -webkit-box-shadow: 1px -1px 1px 1px #333;
+        box-shadow:         1px -1px 1px 1px #333;
+
+      }
+
+      .nav {
+        -moz-box-shadow:    1px 1px 1px 1px #333;
+        -webkit-box-shadow: 1px 1px 1px 1px #333;
+        box-shadow:         1px 1px 1px 1px #333;
+      }
+
+      .testimg {
+        -moz-box-shadow:    2px 2px 2px 2px #333;
+        -webkit-box-shadow: 2px 2px 2px 2px #333;
+        box-shadow:         2px 2px 2px 2px #333;
+      }
+    </style>
+
+    <script data-main="/javascripts/main" src="/javascripts/require.js"></script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
 
-    <div class="stocklist">
-      <div class="buttonstock">TSLA</div>
-      <div class="buttonstock">SCTY</div>
-      <div class="buttonstock">APPL</div>
-      <div class="buttonstock">JNJ</div>
-      <div class="buttonstock">SAN</div>
-      <div class="buttonstock">SPY</div>
+    <div class="nav" style="height:50px;width:100%;position:relative;background-color:#2E9AFE;"></div>
 
+<!--    <div class="testdiv"></div> -->
+
+    <!--
+    <div >
+      <img src="/images/bourassa16x9.jpg" style="width:400px;height:225px;position:absolute;right:100px;top:100px;" class="testimg"></img>
+      <img src="/images/duplessis16x9.jpg" style="width:400px;height:225px;position:absolute;right:100px;top:350px;" class="testimg"></img>
+      <img src="/images/printemps_erable1x1.jpg" style="width:225px;height:225px;position:absolute;right:550px;top:100px;" class="testimg"></img>
     </div>
+    -->
+    <div class="bottomdiv"></div>
+
+    
+<!--    <img src="/images/lys2.svg" alt="lys" style="width:100px;padding:5px;" /> -->
   </body>
 </html>
