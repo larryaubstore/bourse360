@@ -1,12 +1,16 @@
 define(["../common/faceThumbnail/imageThumbnail", 
         "../common/renderers",
-        "../common/jsonEditorDrag" ], function(imageThumbnail, renderers, jsonEditorDrag) {
+        "../common/jsonEditorDrag", 
+        "../common/lineGenerator" ], 
+        function(imageThumbnail, renderers, jsonEditorDrag, lineGenerator) {
 
 
   var _svg; 
   var _data;
   renderers.imageThumbnail = imageThumbnail;
   renderers.jsonEditorDrag = jsonEditorDrag;
+  renderers.lineGenerator  = lineGenerator;
+
 
   var _renderers = renderers;
 
@@ -78,6 +82,8 @@ define(["../common/faceThumbnail/imageThumbnail",
 
     _svg = svg;
     _data = data;
+
+    _renderers.lineGenerator.Render(_svg, _data);
 
     _foci = [];
 

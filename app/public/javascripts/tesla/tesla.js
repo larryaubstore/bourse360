@@ -8,7 +8,7 @@ requirejs.config(
 });
 
 
-requirejs(["d3" ], function(d3) {
+require(["d3" ], function(d3) {
 
   window.d3 = d3;
 
@@ -20,7 +20,7 @@ requirejs(["d3" ], function(d3) {
       level: 1,
       r: 45,
       x: window.width / 2,
-      y: -300,
+      y: 300,
       color: "green",
       imagePath: "images/logo_pq.gif",
       imageWidth: 100, 
@@ -30,7 +30,7 @@ requirejs(["d3" ], function(d3) {
       level: 2,
       r: 110,
       x: window.width / 2,
-      y: -300,
+      y: 300,
       color: "green",
       imagePath: "images/jack.jpg",
       imageWidth: 253, 
@@ -40,7 +40,7 @@ requirejs(["d3" ], function(d3) {
       level: 2,
       r: 110,
       x: window.width / 2,
-      y: -300,
+      y: 300,
       color: "green",
       imagePath: "images/pauline.jpg",
       imageWidth: 253, 
@@ -51,7 +51,7 @@ requirejs(["d3" ], function(d3) {
       level: 3,
       r: 110,
       x: window.width / 2,
-      y: -300,
+      y: 300,
       color: "green",
       imagePath: "images/pauline.jpg",
       imageWidth: 253, 
@@ -61,7 +61,7 @@ requirejs(["d3" ], function(d3) {
       level: 3,
       r: 110,
       x: window.width / 2,
-      y: -300,
+      y: 300,
       color: "green",
       imagePath: "images/pauline.jpg",
       imageWidth: 253, 
@@ -71,7 +71,7 @@ requirejs(["d3" ], function(d3) {
       level: 3,
       r: 110,
       x: window.width / 2,
-      y: -300,
+      y: 300,
       color: "green",
       imagePath: "images/pauline.jpg",
       imageWidth: 253, 

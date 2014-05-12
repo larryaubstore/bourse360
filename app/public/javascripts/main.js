@@ -29,10 +29,7 @@ requirejs([ "d3" ], function( d3 ) {
 
   var data = 
   {
-   "name": "politique",
-   "children": [
-    {
-     "name": "québécoise",
+     "name": "politique",
      "children": [
       {
        "name": "parti québécois",
@@ -67,7 +64,6 @@ requirejs([ "d3" ], function( d3 ) {
       }
 
      ]
-    }]
   };
 
 
@@ -85,13 +81,10 @@ requirejs([ "d3" ], function( d3 ) {
   var div = d3.select("body").append("div")
     .style("width", "100%");
 
-  //var svg = d3.select("body").append("svg")
   var svg = div.append("svg")
       .attr("width", diameter)
       .attr("height", diameter)
       .style("display", "block")
-//      .style("margin", "0 auto")
-
       .style("float", "right")
       .attr("class", "bubble");
 
