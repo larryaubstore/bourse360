@@ -8,6 +8,7 @@
     "requirejs": "*",
     "mongoose" : "*",
     "stylus" : "*",
-    "ejs" : "*"
+    "ejs" : "*",
+    "neo4j-js": "*"
   }
 }
